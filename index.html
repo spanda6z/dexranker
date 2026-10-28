@@ -38,7 +38,6 @@ body.client-mode #view-report{display:block!important}body.client-mode .view:not
 </div></header>
 <main class="max-w-[1200px] mx-auto px-3 sm:px-4 py-4 space-y-4">
 <div id="ops-strip" class="panel rounded flex flex-wrap items-center gap-x-4 gap-y-1 px-3 py-2 text-[11px] mono text-[var(--muted)]"><span>SOL <span class="text-white">TERMINAL</span></span><span class="hidden sm:inline">STORE <span class="text-white" id="store-mode">…</span></span><span class="ml-auto text-[10px]">No volume · No ranking guarantees</span></div>
-
 <section id="view-screener" class="view active space-y-4">
 <div class="panel rounded p-4 space-y-3"><div class="flex items-center gap-2"><span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">SCREENER</span></div>
 <h1 class="text-lg font-semibold tracking-tight">Solana pair terminal</h1>
@@ -48,13 +47,11 @@ body.client-mode #view-report{display:block!important}body.client-mode .view:not
 <div class="panel rounded overflow-hidden"><div class="grid grid-cols-[28px_1fr_70px_56px] sm:grid-cols-[36px_1fr_90px_80px_70px] gap-2 px-3 py-2 border-b border-[var(--border)] text-[10px] mono text-[var(--muted)] uppercase"><div>#</div><div>Pair</div><div class="text-right hidden sm:block">Vol</div><div class="text-right">Δ 24h</div><div class="text-right">Save</div></div>
 <div id="pairs-body" class="divide-y divide-[var(--border)] min-h-[160px]"><div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">Loading…</div></div></div></div>
 </section>
-
 <section id="view-watchlist" class="view space-y-4">
 <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Watchlist</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">WORKSPACE</span></div><button type="button" id="refresh-watch" class="btn-ghost text-[10px] mono px-2 py-1 rounded">REFRESH</button></div>
 <div id="watch-empty" class="panel rounded px-4 py-10 text-center text-[12px] text-[var(--muted)] mono">No saved pairs. Star from Screener.</div>
 <div id="watch-list" class="space-y-2 hidden"></div>
 </section>
-
 <section id="view-distribution" class="view space-y-4">
 <div class="panel rounded p-4"><span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">DISTRIBUTION</span><h2 class="text-lg font-semibold mt-2">Packages</h2><p class="text-[12px] text-[var(--muted)]">Channel placement + report. No rank promises.</p></div>
 <div class="grid sm:grid-cols-3 gap-3">
@@ -62,7 +59,6 @@ body.client-mode #view-report{display:block!important}body.client-mode .view:not
 <div class="panel rounded p-3 space-y-2 border-sky-500/40"><div class="flex justify-between text-[12px]"><span class="font-medium text-sky-300">GROWTH</span><span class="pill bg-sky-500/20 text-sky-300 border border-sky-500/30">TOP</span></div><div class="text-2xl font-semibold mono">$400</div><button type="button" data-pkg="growth" data-view="order" class="pkg-select w-full btn-primary text-[12px] py-2 rounded">Select</button></div>
 <div class="panel rounded p-3 space-y-2"><div class="flex justify-between text-[12px]"><span class="font-medium">SCALE</span><span class="mono text-[var(--muted)]">80ch</span></div><div class="text-2xl font-semibold mono">$900</div><button type="button" data-pkg="scale" data-view="order" class="pkg-select w-full btn-ghost text-[12px] py-2 rounded">Select</button></div>
 </div></section>
-
 <section id="view-order" class="view space-y-4">
 <div class="flex items-center gap-2"><span class="text-[12px] font-semibold">New campaign</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">ORDER</span></div>
 <div class="panel rounded p-4"><div class="grid md:grid-cols-2 gap-5">
@@ -77,16 +73,14 @@ body.client-mode #view-report{display:block!important}body.client-mode .view:not
 <div class="border border-[var(--border)] rounded p-3 text-[11px] text-[var(--muted)]">Submit → Board + portable client report link.</div>
 <button type="button" id="submit-campaign" class="w-full btn-primary text-[13px] py-2.5 rounded">Submit campaign</button>
 </div></div></div></section>
-
 <section id="view-board" class="view space-y-4">
 <div class="flex flex-wrap items-center justify-between gap-2"><div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Campaign board</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">OPS</span></div>
 <div class="flex flex-wrap gap-1.5"><button type="button" id="export-camps" class="btn-ghost text-[10px] mono px-2 py-1 rounded">EXPORT</button>
 <label class="btn-ghost text-[10px] mono px-2 py-1 rounded cursor-pointer">IMPORT<input type="file" id="import-camps" accept="application/json,.json" class="hidden"/></label>
 <button type="button" id="clear-done" class="text-[10px] mono text-[var(--muted)] px-2 py-1">CLEAR DONE</button></div></div>
-<p class="text-[11px] text-[var(--muted)]">Cloud when Supabase is configured · else localStorage. Export/import JSON anytime.</p>
+<p class="text-[11px] text-[var(--muted)]">Cloud when Supabase is configured · else localStorage. Ops password locks this tab when set in config.js.</p>
 <div id="board-empty" class="panel rounded px-4 py-10 text-center text-[12px] text-[var(--muted)] mono">No campaigns yet.</div>
 <div id="board-list" class="space-y-2 hidden"></div></section>
-
 <section id="view-report" class="view space-y-4">
 <div class="flex items-center gap-2 ops-only"><span class="text-[12px] font-semibold">Placement report</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">PORTABLE</span></div>
 <div class="panel rounded p-4 space-y-3">
@@ -106,7 +100,6 @@ body.client-mode #view-report{display:block!important}body.client-mode .view:not
 <div class="flex flex-wrap gap-2 mt-2 ops-only"><button type="button" id="save-rp-notes" class="btn-ghost text-[11px] px-3 py-1.5 rounded">Save to board</button><button type="button" id="copy-report-link-2" class="btn-primary text-[11px] px-3 py-1.5 rounded">Copy updated link</button></div></div>
 <div class="text-[10px] text-[var(--muted)] mono border-t border-[var(--border)] pt-3">DexRanker · Exposure only · No ranking guarantees · Not affiliated with Dexscreener</div>
 </div></div></section>
-
 <footer class="border-t border-[var(--border)] pt-4 pb-8 text-[10px] mono text-[var(--muted)] flex justify-between gap-2 flex-wrap"><span>DEXRANKER</span><span>NOT AFFILIATED WITH DEXSCREENER</span></footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -116,17 +109,20 @@ body.client-mode #view-report{display:block!important}body.client-mode .view:not
 const TREASURY='9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW';
 const PKG_CH={starter:15,growth:40,scale:80};
 const WATCH_KEY='dexranker_watch_v1';
+const OPS_VIEWS={order:1,board:1};
 function uid(){return 'dr_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function loadJSON(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch{return[]}}
 function saveJSON(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function loadWatch(){return loadJSON(WATCH_KEY)}function saveWatch(l){saveJSON(WATCH_KEY,l)}
 async function loadCampaigns(){return CampaignStore.list()}
+function isOpsUnlocked(){const cfg=window.DEXRANKER_CONFIG||{};if(!cfg.opsPassword)return true;return sessionStorage.getItem('dexranker_ops')==='1'}
+function requireOps(name){if(!OPS_VIEWS[name])return true;if(isOpsUnlocked())return true;const cfg=window.DEXRANKER_CONFIG||{};const p=prompt('Ops password required');if(p!=null&&p===cfg.opsPassword){sessionStorage.setItem('dexranker_ops','1');return true}if(p!=null)alert('Wrong password');return false}
 function fmtVol(n){if(n==null||isNaN(n))return'—';if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(0)+'K';return'$'+Number(n).toFixed(0)}
 function fmtCh(n){if(n==null||isNaN(n))return'—';return(n>=0?'+':'')+Number(n).toFixed(1)+'%'}
 function encodeReport(c){const p={id:c.id,mint:c.mint,symbol:c.symbol,name:c.name||'',pkg:c.pkg,channels:c.channels,contact:c.contact||'',status:c.status||'pending',createdAt:c.createdAt,placementNotes:c.placementNotes||''};return btoa(unescape(encodeURIComponent(JSON.stringify(p)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 function decodeReport(str){try{str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';return JSON.parse(decodeURIComponent(escape(atob(str))))}catch{return null}}
 function reportShareUrl(c){const url=new URL(location.href.split('?')[0]);url.searchParams.set('view','report');url.searchParams.set('r',encodeReport(c));return url.toString()}
-function showView(name){if(document.body.classList.contains('client-mode'))return;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));const el=document.getElementById('view-'+name);if(el)el.classList.add('active');document.querySelectorAll('.tab[data-view="'+name+'"]').forEach(t=>t.classList.add('active'));if(name==='board')renderBoard();if(name==='report')populateReportSelect();if(name==='watchlist')renderWatch()}
+function showView(name){if(document.body.classList.contains('client-mode'))return;if(!requireOps(name))return;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));const el=document.getElementById('view-'+name);if(el)el.classList.add('active');document.querySelectorAll('.tab[data-view="'+name+'"]').forEach(t=>t.classList.add('active'));if(name==='board')renderBoard();if(name==='report')populateReportSelect();if(name==='watchlist')renderWatch()}
 document.querySelectorAll('[data-view]').forEach(btn=>{btn.addEventListener('click',()=>{const v=btn.getAttribute('data-view');if(btn.classList.contains('pkg-select')){const pkg=btn.getAttribute('data-pkg');const sel=document.getElementById('pkg');if(sel&&pkg)sel.value=pkg}showView(v)})});
 (function initRoute(){const q=new URLSearchParams(location.search);const view=q.get('view'),r=q.get('r'),id=q.get('id');if(view==='report'&&r){document.body.classList.add('client-mode');const data=decodeReport(r);if(data)setTimeout(()=>displayReport(data,true),20);return}if(view)showView(view);if(view==='report'&&id)setTimeout(async()=>{const list=await loadCampaigns();const c=list.find(x=>x.id===id);if(c)displayReport(c,false)},30)})();
 document.getElementById('copy-treasury').addEventListener('click',function(){navigator.clipboard.writeText(TREASURY);this.textContent='COPIED';setTimeout(()=>{this.textContent='COPY'},1000)});
@@ -143,7 +139,7 @@ document.getElementById('import-camps').addEventListener('change',e=>{const file
 async function populateReportSelect(){const sel=document.getElementById('report-select');const list=await loadCampaigns();const cur=sel.value;sel.innerHTML='<option value="">From board…</option>'+list.map(c=>'<option value="'+c.id+'">'+(c.symbol||c.id)+' · '+(c.status||'')+'</option>').join('');if(cur)sel.value=cur}
 function displayReport(c,clientMode){const card=document.getElementById('report-card');card.classList.remove('hidden');document.getElementById('rp-symbol').textContent=(c.symbol||'?')+(c.name?' — '+c.name:'');document.getElementById('rp-mint').textContent=c.mint||'—';document.getElementById('rp-pkg').textContent=(c.pkg||'—').toUpperCase();document.getElementById('rp-ch').textContent=(c.channels!=null?c.channels:'—')+' ch';document.getElementById('rp-created').textContent=c.createdAt?new Date(c.createdAt).toLocaleString():'—';document.getElementById('rp-contact').textContent=c.contact||'—';document.getElementById('rp-status').textContent=(c.status||'pending').toUpperCase();const notes=c.placementNotes||'';document.getElementById('rp-notes').value=notes;const ro=document.getElementById('rp-notes-readonly');ro.textContent=notes||'—';if(clientMode||document.body.classList.contains('client-mode')){document.getElementById('rp-notes').classList.add('hidden');ro.classList.remove('hidden')}else{document.getElementById('rp-notes').classList.remove('hidden');ro.classList.add('hidden')}card.dataset.id=c.id||'';if(!document.body.classList.contains('client-mode')){const url=new URL(location.href.split('?')[0]);url.searchParams.set('view','report');url.searchParams.set('r',encodeReport(c));history.replaceState(null,'',url.toString())}}
 document.getElementById('load-report').addEventListener('click',async()=>{const id=document.getElementById('report-select').value;const list=await loadCampaigns();const c=list.find(x=>x.id===id);if(c)displayReport(c,false)});
-function currentReportFromUI(){const card=document.getElementById('report-card');if(card.classList.contains('hidden'))return null;const id=card.dataset.id;const base={};return{id:id||uid(),mint:document.getElementById('rp-mint').textContent,symbol:(document.getElementById('rp-symbol').textContent||'').split(' — ')[0],name:(document.getElementById('rp-symbol').textContent||'').includes(' — ')?document.getElementById('rp-symbol').textContent.split(' — ').slice(1).join(' — '):'',pkg:(document.getElementById('rp-pkg').textContent||'').toLowerCase(),channels:parseInt(document.getElementById('rp-ch').textContent,10)||base.channels,contact:document.getElementById('rp-contact').textContent,status:(document.getElementById('rp-status').textContent||'pending').toLowerCase(),createdAt:base.createdAt||new Date().toISOString(),placementNotes:document.getElementById('rp-notes').value}}
+function currentReportFromUI(){const card=document.getElementById('report-card');if(card.classList.contains('hidden'))return null;const id=card.dataset.id;return{id:id||uid(),mint:document.getElementById('rp-mint').textContent,symbol:(document.getElementById('rp-symbol').textContent||'').split(' — ')[0],name:(document.getElementById('rp-symbol').textContent||'').includes(' — ')?document.getElementById('rp-symbol').textContent.split(' — ').slice(1).join(' — '):'',pkg:(document.getElementById('rp-pkg').textContent||'').toLowerCase(),channels:parseInt(document.getElementById('rp-ch').textContent,10)||0,contact:document.getElementById('rp-contact').textContent,status:(document.getElementById('rp-status').textContent||'pending').toLowerCase(),createdAt:new Date().toISOString(),placementNotes:document.getElementById('rp-notes').value}}
 document.getElementById('save-rp-notes').addEventListener('click',async()=>{const id=document.getElementById('report-card').dataset.id;const notes=document.getElementById('rp-notes').value;const list=await loadCampaigns();const c=list.find(x=>x.id===id);if(c){await CampaignStore.setNotes(id,notes);c.placementNotes=notes;displayReport(c,false);alert('Saved.')}else{const cur=currentReportFromUI();if(cur)displayReport(cur,false);alert('Updated share payload — copy link.')}});
 function copyShare(){const c=currentReportFromUI();if(!c){alert('Load a report first.');return}c.placementNotes=document.getElementById('rp-notes').value;const link=reportShareUrl(c);navigator.clipboard.writeText(link);history.replaceState(null,'',link);return link}
 document.getElementById('copy-report-link').addEventListener('click',function(){if(copyShare()){this.textContent='Copied';setTimeout(()=>{this.textContent='Copy share link'},1200)}});
