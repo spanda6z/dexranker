@@ -4,10 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DexRanker — Solana Visibility Terminal</title>
-  <meta name="description" content="Track Solana pairs. Run distribution. Measure what moved. Exposure tools only — no ranking guarantees." />
+  <meta name="description" content="Track Solana pairs. Run distribution. Share placement reports. Exposure tools only." />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root { --bg: #07080a; --panel: #0c0e12; --border: #1a1d24; --muted: #6b7280; --text: #e5e7eb; }
@@ -34,260 +32,212 @@
 </head>
 <body class="min-h-screen antialiased">
   <header class="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur">
-    <div class="max-w-[1200px] mx-auto px-3 sm:px-4 h-11 flex items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <div class="w-5 h-5 rounded bg-sky-500 flex items-center justify-center">
-          <svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        </div>
-        <span class="font-semibold text-sm tracking-tight">DexRanker</span>
-        <span class="hidden sm:inline mono text-[10px] text-[var(--muted)] border border-[var(--border)] px-1.5 py-0.5 rounded">SOL</span>
-      </div>
-      <nav class="flex items-center gap-0.5 sm:gap-3 text-[11px] sm:text-[12px] overflow-x-auto">
-        <button type="button" data-view="screener" class="tab active px-2 py-3 whitespace-nowrap">Screener</button>
-        <button type="button" data-view="distribution" class="tab px-2 py-3 whitespace-nowrap">Distribution</button>
-        <button type="button" data-view="order" class="tab px-2 py-3 whitespace-nowrap">Campaign</button>
-        <button type="button" data-view="board" class="tab px-2 py-3 whitespace-nowrap">Board</button>
-        <button type="button" data-view="report" class="tab px-2 py-3 whitespace-nowrap">Report</button>
-      </nav>
+    <div class="max-w-[1200px] mx-auto px-3 sm:px-4 h-11 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2 shrink-0">
-        <span class="hidden md:flex items-center gap-1.5 mono text-[10px] text-emerald-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> LIVE</span>
-        <button type="button" data-view="order" class="btn-primary text-[11px] sm:text-[12px] px-2.5 sm:px-3 py-1.5 rounded">New</button>
+        <div class="w-5 h-5 rounded bg-sky-500 flex items-center justify-center"><svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+        <span class="font-semibold text-sm tracking-tight">DexRanker</span>
       </div>
+      <nav class="flex items-center gap-0 sm:gap-2 text-[11px] sm:text-[12px] overflow-x-auto max-w-[55vw] sm:max-w-none">
+        <button type="button" data-view="screener" class="tab active px-1.5 sm:px-2 py-3 whitespace-nowrap">Screener</button>
+        <button type="button" data-view="watchlist" class="tab px-1.5 sm:px-2 py-3 whitespace-nowrap">Watch</button>
+        <button type="button" data-view="distribution" class="tab px-1.5 sm:px-2 py-3 whitespace-nowrap">Distro</button>
+        <button type="button" data-view="order" class="tab px-1.5 sm:px-2 py-3 whitespace-nowrap">Campaign</button>
+        <button type="button" data-view="board" class="tab px-1.5 sm:px-2 py-3 whitespace-nowrap">Board</button>
+        <button type="button" data-view="report" class="tab px-1.5 sm:px-2 py-3 whitespace-nowrap">Report</button>
+      </nav>
+      <button type="button" data-view="order" class="btn-primary text-[11px] px-2.5 py-1.5 rounded shrink-0">New</button>
     </div>
   </header>
   <main class="max-w-[1200px] mx-auto px-3 sm:px-4 py-4 space-y-4">
-    <div class="panel rounded flex flex-wrap items-center gap-x-5 gap-y-2 px-3 py-2 text-[11px] mono text-[var(--muted)]">
-      <span>NETWORK <span class="text-white">Solana</span></span>
-      <span>MODE <span class="text-sky-400">TERMINAL</span></span>
-      <span class="hidden sm:inline">PHASE <span class="text-white">1</span></span>
-      <span class="ml-auto text-[10px]">No volume · No wash · No ranking guarantees</span>
+    <div class="panel rounded flex flex-wrap items-center gap-x-4 gap-y-1 px-3 py-2 text-[11px] mono text-[var(--muted)]">
+      <span>SOL <span class="text-white">TERMINAL</span></span>
+      <span class="hidden sm:inline">PHASE <span class="text-white">2</span></span>
+      <span class="ml-auto text-[10px]">No volume · No ranking guarantees</span>
     </div>
 
     <section id="view-screener" class="view active space-y-4">
-      <div class="grid lg:grid-cols-[1fr_280px] gap-4">
-        <div class="panel rounded p-4 sm:p-5">
-          <div class="flex items-center gap-2 mb-2"><span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">SCREENER</span><span class="text-[11px] text-[var(--muted)] mono">free core</span></div>
-          <h1 class="text-xl sm:text-2xl font-semibold tracking-tight mb-2">Solana pair visibility terminal</h1>
-          <p class="text-[13px] text-[var(--muted)] leading-relaxed max-w-xl">Track what’s moving. Run distribution. Log campaigns and share placement reports. Rankings are decided by the market — not by us.</p>
-        </div>
-        <div class="panel rounded p-4 space-y-3">
-          <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider">Session</div>
-          <div class="grid grid-cols-2 gap-2">
-            <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">CHANNELS</div><div class="text-lg font-semibold mono">80+</div></div>
-            <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">WINDOW</div><div class="text-lg font-semibold mono">24h</div></div>
-            <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">START</div><div class="text-lg font-semibold mono text-sky-400">~2–4h</div></div>
-            <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">TYPE</div><div class="text-lg font-semibold mono">REAL</div></div>
-          </div>
-        </div>
+      <div class="panel rounded p-4">
+        <div class="flex items-center gap-2 mb-1"><span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">SCREENER</span></div>
+        <h1 class="text-lg font-semibold tracking-tight">Solana pair terminal</h1>
+        <p class="text-[12px] text-[var(--muted)] mt-1">Live boosted pairs · save to Watch · run distribution when ready.</p>
       </div>
       <div>
-        <div class="flex items-center justify-between mb-2 px-0.5">
-          <div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Trending / boosted pairs</span><span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">SOL</span></div>
-          <div class="flex items-center gap-2"><span id="screener-status" class="text-[10px] mono text-[var(--muted)]">Loading…</span><button type="button" id="refresh-screener" class="btn-ghost text-[10px] mono px-2 py-1 rounded">REFRESH</button></div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[12px] font-semibold">Boosted / trending</span>
+          <div class="flex items-center gap-2"><span id="screener-status" class="text-[10px] mono text-[var(--muted)]">…</span><button type="button" id="refresh-screener" class="btn-ghost text-[10px] mono px-2 py-1 rounded">REFRESH</button></div>
         </div>
         <div class="panel rounded overflow-hidden">
-          <div class="grid grid-cols-[28px_1fr_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2 border-b border-[var(--border)] text-[10px] mono text-[var(--muted)] uppercase tracking-wider"><div>#</div><div>Pair</div><div class="text-right hidden sm:block">Volume 24h</div><div class="text-right">Change</div><div class="text-right hidden sm:block">Status</div></div>
-          <div id="pairs-body" class="divide-y divide-[var(--border)] min-h-[200px]"><div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">Fetching Dexscreener…</div></div>
-          <div class="px-3 py-2 border-t border-[var(--border)] text-[10px] text-[var(--muted)] mono">Live via Dexscreener API · Not affiliated · Not financial advice</div>
+          <div class="grid grid-cols-[28px_1fr_70px_56px] sm:grid-cols-[36px_1fr_90px_80px_70px] gap-2 px-3 py-2 border-b border-[var(--border)] text-[10px] mono text-[var(--muted)] uppercase"><div>#</div><div>Pair</div><div class="text-right hidden sm:block">Vol</div><div class="text-right">Δ 24h</div><div class="text-right">Save</div></div>
+          <div id="pairs-body" class="divide-y divide-[var(--border)] min-h-[180px]"><div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">Loading…</div></div>
         </div>
       </div>
+    </section>
+
+    <section id="view-watchlist" class="view space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Watchlist</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">WORKSPACE</span></div>
+        <button type="button" id="refresh-watch" class="btn-ghost text-[10px] mono px-2 py-1 rounded">REFRESH PRICES</button>
+      </div>
+      <div id="watch-empty" class="panel rounded px-4 py-10 text-center text-[12px] text-[var(--muted)] mono">No saved pairs. Star tokens from Screener.</div>
+      <div id="watch-list" class="space-y-2 hidden"></div>
     </section>
 
     <section id="view-distribution" class="view space-y-4">
-      <div class="panel rounded p-4 sm:p-5">
-        <div class="flex items-center gap-2 mb-2"><span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">DISTRIBUTION</span><span class="text-[11px] text-[var(--muted)] mono">paid module</span></div>
-        <h2 class="text-lg font-semibold mb-1">Push pairs into active Solana traffic</h2>
-        <p class="text-[13px] text-[var(--muted)] max-w-2xl">Place your pair in front of Telegram, X, and signal feeds that already watch Dexscreener. Exposure + placement report. Market decides rank.</p>
+      <div class="panel rounded p-4">
+        <div class="flex items-center gap-2 mb-1"><span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">DISTRIBUTION</span></div>
+        <h2 class="text-lg font-semibold">Packages</h2>
+        <p class="text-[12px] text-[var(--muted)]">Real channel placement. Report included. No rank promises.</p>
       </div>
       <div class="grid sm:grid-cols-3 gap-3">
-        <div class="panel rounded overflow-hidden"><div class="px-3 py-2 border-b border-[var(--border)] flex justify-between"><span class="text-[12px] font-medium">STARTER</span><span class="mono text-[11px] text-[var(--muted)]">15 CH</span></div><div class="p-3 space-y-3"><div><div class="text-2xl font-semibold mono">$150</div><div class="text-[11px] text-[var(--muted)]">/ 24h</div></div><ul class="space-y-1.5 text-[12px] text-[var(--muted)]"><li class="flex gap-2"><span class="text-sky-400">▸</span> 15 channels</li><li class="flex gap-2"><span class="text-sky-400">▸</span> Basic report</li></ul><button type="button" data-pkg="starter" data-view="order" class="pkg-select block w-full text-center btn-ghost text-[12px] py-2 rounded">Select</button></div></div>
-        <div class="panel rounded overflow-hidden border-sky-500/40"><div class="px-3 py-2 border-b border-sky-500/20 bg-sky-500/5 flex justify-between"><span class="text-[12px] font-medium text-sky-300">GROWTH</span><span class="pill bg-sky-500/20 text-sky-300 border border-sky-500/30">MOST USED</span></div><div class="p-3 space-y-3"><div><div class="text-2xl font-semibold mono">$400</div><div class="text-[11px] text-[var(--muted)]">/ 24h</div></div><ul class="space-y-1.5 text-[12px] text-[var(--muted)]"><li class="flex gap-2"><span class="text-sky-400">▸</span> 40 channels</li><li class="flex gap-2"><span class="text-sky-400">▸</span> Priority + report</li></ul><button type="button" data-pkg="growth" data-view="order" class="pkg-select block w-full text-center btn-primary text-[12px] py-2 rounded">Select</button></div></div>
-        <div class="panel rounded overflow-hidden"><div class="px-3 py-2 border-b border-[var(--border)] flex justify-between"><span class="text-[12px] font-medium">SCALE</span><span class="mono text-[11px] text-[var(--muted)]">80 CH</span></div><div class="p-3 space-y-3"><div><div class="text-2xl font-semibold mono">$900</div><div class="text-[11px] text-[var(--muted)]">/ 24h</div></div><ul class="space-y-1.5 text-[12px] text-[var(--muted)]"><li class="flex gap-2"><span class="text-sky-400">▸</span> 80 channels</li><li class="flex gap-2"><span class="text-sky-400">▸</span> Full report</li></ul><button type="button" data-pkg="scale" data-view="order" class="pkg-select block w-full text-center btn-ghost text-[12px] py-2 rounded">Select</button></div></div>
+        <div class="panel rounded p-3 space-y-2"><div class="flex justify-between text-[12px]"><span class="font-medium">STARTER</span><span class="mono text-[var(--muted)]">15ch</span></div><div class="text-2xl font-semibold mono">$150</div><button type="button" data-pkg="starter" data-view="order" class="pkg-select w-full btn-ghost text-[12px] py-2 rounded">Select</button></div>
+        <div class="panel rounded p-3 space-y-2 border-sky-500/40"><div class="flex justify-between text-[12px]"><span class="font-medium text-sky-300">GROWTH</span><span class="pill bg-sky-500/20 text-sky-300 border border-sky-500/30">TOP</span></div><div class="text-2xl font-semibold mono">$400</div><button type="button" data-pkg="growth" data-view="order" class="pkg-select w-full btn-primary text-[12px] py-2 rounded">Select</button></div>
+        <div class="panel rounded p-3 space-y-2"><div class="flex justify-between text-[12px]"><span class="font-medium">SCALE</span><span class="mono text-[var(--muted)]">80ch</span></div><div class="text-2xl font-semibold mono">$900</div><button type="button" data-pkg="scale" data-view="order" class="pkg-select w-full btn-ghost text-[12px] py-2 rounded">Select</button></div>
       </div>
-      <div class="panel rounded p-4 text-[11px] text-[var(--muted)]"><span class="text-amber-400/90">NOTE</span> — Best when the pair already has organic activity. Visibility amplifies; it does not invent demand.</div>
     </section>
 
     <section id="view-order" class="view space-y-4">
-      <div class="flex items-center gap-2 px-0.5"><span class="text-[12px] font-semibold">New campaign</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">ORDER</span></div>
+      <div class="flex items-center gap-2"><span class="text-[12px] font-semibold">New campaign</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">ORDER</span></div>
       <div class="panel rounded p-4">
-        <div class="grid md:grid-cols-2 gap-6">
+        <div class="grid md:grid-cols-2 gap-5">
           <div class="space-y-3">
-            <div>
-              <label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Token mint</label>
-              <div class="flex gap-2"><input id="token" type="text" placeholder="Paste contract address" class="rounded px-3 py-2.5 flex-1" /><button type="button" id="lookup-mint" class="btn-ghost text-[11px] mono px-3 rounded shrink-0">LOOKUP</button></div>
-              <div id="mint-preview" class="mt-2 hidden panel rounded p-3 text-[12px]"></div>
-            </div>
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Package</label><select id="pkg" class="rounded px-3 py-2.5"><option value="starter">STARTER — $150 · 15ch</option><option value="growth" selected>GROWTH — $400 · 40ch</option><option value="scale">SCALE — $900 · 80ch</option></select></div>
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Contact (Telegram)</label><input id="contact" type="text" placeholder="@handle" class="rounded px-3 py-2.5" /></div>
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Notes</label><textarea id="notes" rows="2" placeholder="Optional" class="rounded px-3 py-2.5 resize-none"></textarea></div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase mb-1">Token mint</label><div class="flex gap-2"><input id="token" type="text" placeholder="Contract address" class="rounded px-3 py-2.5 flex-1" /><button type="button" id="lookup-mint" class="btn-ghost text-[11px] mono px-3 rounded">LOOKUP</button></div><div id="mint-preview" class="mt-2 hidden panel rounded p-3 text-[12px]"></div></div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase mb-1">Package</label><select id="pkg" class="rounded px-3 py-2.5"><option value="starter">STARTER — $150 · 15ch</option><option value="growth" selected>GROWTH — $400 · 40ch</option><option value="scale">SCALE — $900 · 80ch</option></select></div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase mb-1">Contact (Telegram)</label><input id="contact" type="text" placeholder="@handle" class="rounded px-3 py-2.5" /></div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase mb-1">Notes</label><textarea id="notes" rows="2" class="rounded px-3 py-2.5 resize-none" placeholder="Optional"></textarea></div>
           </div>
           <div class="space-y-3">
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Treasury (SOL)</label><div class="mono text-[12px] break-all bg-black/50 border border-[var(--border)] rounded px-3 py-2.5 text-sky-300/90">9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW</div><button type="button" id="copy-treasury" class="mt-1.5 text-[10px] mono text-sky-400 hover:text-sky-300">COPY</button></div>
-            <div class="border border-[var(--border)] rounded p-3 text-[11px] text-[var(--muted)] leading-relaxed">1. Lookup mint (optional)<br/>2. Send SOL for package<br/>3. Submit → saved to Board + TG share</div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase mb-1">Treasury (SOL)</label><div class="mono text-[12px] break-all bg-black/50 border border-[var(--border)] rounded px-3 py-2.5 text-sky-300/90">9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW</div><button type="button" id="copy-treasury" class="mt-1 text-[10px] mono text-sky-400">COPY</button></div>
+            <div class="border border-[var(--border)] rounded p-3 text-[11px] text-[var(--muted)]">Submit saves to Board and builds a portable report link you can share with the client.</div>
             <button type="button" id="submit-campaign" class="w-full btn-primary text-[13px] py-2.5 rounded">Submit campaign</button>
-            <p class="text-[10px] text-[var(--muted)] mono text-center">Verify treasury · Payments final</p>
           </div>
         </div>
       </div>
     </section>
 
     <section id="view-board" class="view space-y-4">
-      <div class="flex items-center justify-between px-0.5"><div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Campaign board</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">OPS</span></div><button type="button" id="clear-done" class="text-[10px] mono text-[var(--muted)] hover:text-white">CLEAR DONE</button></div>
-      <p class="text-[11px] text-[var(--muted)] px-0.5">Local ops board (this browser). Mark status as you fulfill. Generate a report link for clients.</p>
-      <div id="board-empty" class="panel rounded px-4 py-10 text-center text-[12px] text-[var(--muted)] mono">No campaigns yet. Submit one from the Campaign tab.</div>
+      <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Campaign board</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">OPS</span></div><button type="button" id="clear-done" class="text-[10px] mono text-[var(--muted)]">CLEAR DONE</button></div>
+      <div id="board-empty" class="panel rounded px-4 py-10 text-center text-[12px] text-[var(--muted)] mono">No campaigns yet.</div>
       <div id="board-list" class="space-y-2 hidden"></div>
     </section>
 
     <section id="view-report" class="view space-y-4">
-      <div class="flex items-center gap-2 px-0.5"><span class="text-[12px] font-semibold">Placement report</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">SHARE</span></div>
-      <div class="panel rounded p-4 space-y-4">
-        <p class="text-[12px] text-[var(--muted)]">Select a campaign from the board, or load by ID. Share the URL with your client as proof of placement.</p>
-        <div class="flex flex-wrap gap-2"><select id="report-select" class="rounded px-3 py-2 flex-1 min-w-[200px]"><option value="">Select campaign…</option></select><button type="button" id="load-report" class="btn-ghost text-[12px] px-3 py-2 rounded">Load</button><button type="button" id="copy-report-link" class="btn-primary text-[12px] px-3 py-2 rounded">Copy report link</button></div>
+      <div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Placement report</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">PORTABLE</span></div>
+      <div class="panel rounded p-4 space-y-3">
+        <p class="text-[12px] text-[var(--muted)]">Reports are encoded in the URL so clients can open them on any device — no login required.</p>
+        <div class="flex flex-wrap gap-2"><select id="report-select" class="rounded px-3 py-2 flex-1 min-w-[160px]"><option value="">From board…</option></select><button type="button" id="load-report" class="btn-ghost text-[12px] px-3 py-2 rounded">Load</button><button type="button" id="copy-report-link" class="btn-primary text-[12px] px-3 py-2 rounded">Copy share link</button></div>
         <div id="report-card" class="hidden border border-[var(--border)] rounded p-4 space-y-3">
-          <div class="flex flex-wrap items-start justify-between gap-2"><div><div class="text-[10px] mono text-[var(--muted)] uppercase">Campaign</div><div id="rp-symbol" class="text-lg font-semibold">—</div><div id="rp-mint" class="mono text-[11px] text-[var(--muted)] break-all">—</div></div><div id="rp-status" class="pill bg-white/5 border border-[var(--border)]">—</div></div>
+          <div class="flex flex-wrap justify-between gap-2"><div><div class="text-[10px] mono text-[var(--muted)] uppercase">Campaign</div><div id="rp-symbol" class="text-lg font-semibold">—</div><div id="rp-mint" class="mono text-[11px] text-[var(--muted)] break-all">—</div></div><div id="rp-status" class="pill bg-white/5 border border-[var(--border)]">—</div></div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[12px]">
             <div class="bg-black/40 border border-[var(--border)] rounded p-2"><div class="text-[10px] text-[var(--muted)] mono">PACKAGE</div><div id="rp-pkg" class="font-medium mono">—</div></div>
             <div class="bg-black/40 border border-[var(--border)] rounded p-2"><div class="text-[10px] text-[var(--muted)] mono">CHANNELS</div><div id="rp-ch" class="font-medium mono">—</div></div>
             <div class="bg-black/40 border border-[var(--border)] rounded p-2"><div class="text-[10px] text-[var(--muted)] mono">CREATED</div><div id="rp-created" class="font-medium mono text-[11px]">—</div></div>
             <div class="bg-black/40 border border-[var(--border)] rounded p-2"><div class="text-[10px] text-[var(--muted)] mono">CONTACT</div><div id="rp-contact" class="font-medium mono text-[11px]">—</div></div>
           </div>
-          <div><div class="text-[10px] mono text-[var(--muted)] uppercase mb-1">Placement notes</div><textarea id="rp-notes" rows="3" class="rounded px-3 py-2 text-[12px]" placeholder="e.g. Posted in 12 TG groups, 8 X accounts"></textarea><button type="button" id="save-rp-notes" class="mt-2 btn-ghost text-[11px] px-3 py-1.5 rounded">Save notes</button></div>
-          <div class="text-[10px] text-[var(--muted)] mono border-t border-[var(--border)] pt-2">DexRanker placement report · Exposure only · No ranking guarantees</div>
+          <div><div class="text-[10px] mono text-[var(--muted)] uppercase mb-1">Placement notes</div><textarea id="rp-notes" rows="3" class="rounded px-3 py-2 text-[12px]" placeholder="Channels, timestamps, links…"></textarea>
+            <div class="flex flex-wrap gap-2 mt-2"><button type="button" id="save-rp-notes" class="btn-ghost text-[11px] px-3 py-1.5 rounded">Save to board</button><button type="button" id="copy-report-link-2" class="btn-primary text-[11px] px-3 py-1.5 rounded">Copy updated link</button></div></div>
+          <div class="text-[10px] text-[var(--muted)] mono border-t border-[var(--border)] pt-2">DexRanker · Exposure only · No ranking guarantees</div>
         </div>
       </div>
     </section>
 
-    <footer class="border-t border-[var(--border)] pt-4 pb-8 flex flex-col sm:flex-row justify-between gap-2 text-[10px] mono text-[var(--muted)]"><span>DEXRANKER · PHASE 1 · 2026</span><span>EXPOSURE + TOOLS · NO RANKING GUARANTEES</span></footer>
+    <footer class="border-t border-[var(--border)] pt-4 pb-8 text-[10px] mono text-[var(--muted)] flex justify-between gap-2 flex-wrap"><span>DEXRANKER · PHASE 2</span><span>NOT AFFILIATED WITH DEXSCREENER</span></footer>
   </main>
   <script>
     const TREASURY = '9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW';
     const PKG_CH = { starter: 15, growth: 40, scale: 80 };
-    const STORAGE_KEY = 'dexranker_campaigns_v1';
-    function uid() { return 'dr_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
-    function loadCampaigns() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; } }
-    function saveCampaigns(list) { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }
+    const CAM_KEY = 'dexranker_campaigns_v1';
+    const WATCH_KEY = 'dexranker_watch_v1';
+    function uid() { return 'dr_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+    function loadJSON(key) { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; } }
+    function saveJSON(key, v) { localStorage.setItem(key, JSON.stringify(v)); }
+    function loadCampaigns() { return loadJSON(CAM_KEY); }
+    function saveCampaigns(l) { saveJSON(CAM_KEY, l); }
+    function loadWatch() { return loadJSON(WATCH_KEY); }
+    function saveWatch(l) { saveJSON(WATCH_KEY, l); }
+    function fmtVol(n) { if (n == null || isNaN(n)) return '—'; if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M'; if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K'; return '$' + Number(n).toFixed(0); }
+    function fmtCh(n) { if (n == null || isNaN(n)) return '—'; return (n >= 0 ? '+' : '') + Number(n).toFixed(1) + '%'; }
+    function encodeReport(c) {
+      const payload = { id: c.id, mint: c.mint, symbol: c.symbol, name: c.name || '', pkg: c.pkg, channels: c.channels, contact: c.contact || '', status: c.status || 'pending', createdAt: c.createdAt, placementNotes: c.placementNotes || '' };
+      return btoa(unescape(encodeURIComponent(JSON.stringify(payload)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+    function decodeReport(str) {
+      try { str = str.replace(/-/g, '+').replace(/_/g, '/'); while (str.length % 4) str += '='; return JSON.parse(decodeURIComponent(escape(atob(str)))); } catch { return null; }
+    }
+    function reportShareUrl(c) { const url = new URL(location.href.split('?')[0]); url.searchParams.set('view', 'report'); url.searchParams.set('r', encodeReport(c)); return url.toString(); }
     function showView(name) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      const el = document.getElementById('view-' + name);
-      if (el) el.classList.add('active');
+      const el = document.getElementById('view-' + name); if (el) el.classList.add('active');
       document.querySelectorAll('.tab[data-view="' + name + '"]').forEach(t => t.classList.add('active'));
       if (name === 'board') renderBoard();
       if (name === 'report') populateReportSelect();
+      if (name === 'watchlist') renderWatch();
     }
     document.querySelectorAll('[data-view]').forEach(btn => {
       btn.addEventListener('click', () => {
         const v = btn.getAttribute('data-view');
-        if (btn.classList.contains('pkg-select')) {
-          const pkg = btn.getAttribute('data-pkg');
-          const sel = document.getElementById('pkg');
-          if (sel && pkg) sel.value = pkg;
-        }
+        if (btn.classList.contains('pkg-select')) { const pkg = btn.getAttribute('data-pkg'); const sel = document.getElementById('pkg'); if (sel && pkg) sel.value = pkg; }
         showView(v);
       });
     });
     (function initRoute() {
       const q = new URLSearchParams(location.search);
-      const view = q.get('view');
-      const id = q.get('id');
+      const view = q.get('view'); const r = q.get('r'); const id = q.get('id');
       if (view) showView(view);
-      if (view === 'report' && id) setTimeout(() => { const sel = document.getElementById('report-select'); if (sel) { sel.value = id; loadReport(id); } }, 50);
+      if (view === 'report' && r) setTimeout(() => { const data = decodeReport(r); if (data) displayReport(data, true); }, 30);
+      else if (view === 'report' && id) setTimeout(() => { const sel = document.getElementById('report-select'); if (sel) sel.value = id; const c = loadCampaigns().find(x => x.id === id); if (c) displayReport(c, false); }, 30);
     })();
-    document.getElementById('copy-treasury').addEventListener('click', function () {
-      navigator.clipboard.writeText(TREASURY);
-      this.textContent = 'COPIED';
-      setTimeout(() => { this.textContent = 'COPY'; }, 1200);
-    });
-    function fmtVol(n) { if (n == null || isNaN(n)) return '—'; if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M'; if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K'; return '$' + Number(n).toFixed(0); }
-    function fmtCh(n) { if (n == null || isNaN(n)) return '—'; return (n >= 0 ? '+' : '') + Number(n).toFixed(1) + '%'; }
+    document.getElementById('copy-treasury').addEventListener('click', function () { navigator.clipboard.writeText(TREASURY); this.textContent = 'COPIED'; setTimeout(() => { this.textContent = 'COPY'; }, 1000); });
     async function lookupMint() {
-      const input = document.getElementById('token');
-      const preview = document.getElementById('mint-preview');
+      const input = document.getElementById('token'); const preview = document.getElementById('mint-preview');
       const mint = (input.value || '').trim();
-      if (!mint || mint.length < 32) { preview.classList.add('hidden'); preview.innerHTML = ''; return; }
-      preview.classList.remove('hidden');
-      preview.innerHTML = '<span class="mono text-[var(--muted)] text-[11px]">Looking up…</span>';
+      if (!mint || mint.length < 32) { preview.classList.add('hidden'); return; }
+      preview.classList.remove('hidden'); preview.innerHTML = '<span class="mono text-[11px] text-[var(--muted)]">Looking up…</span>';
       try {
         const res = await fetch('https://api.dexscreener.com/tokens/v1/solana/' + mint);
-        if (!res.ok) throw new Error('status');
-        const data = await res.json();
-        const pairs = Array.isArray(data) ? data : (data.pairs || []);
-        if (!pairs.length) { preview.innerHTML = '<span class="text-amber-400 text-[11px]">No Solana pairs found for this mint.</span>'; return; }
+        if (!res.ok) throw new Error('fail');
+        const data = await res.json(); const pairs = Array.isArray(data) ? data : (data.pairs || []);
+        if (!pairs.length) { preview.innerHTML = '<span class="text-amber-400 text-[11px]">No Solana pairs found.</span>'; return; }
         pairs.sort((a, b) => ((b.volume && b.volume.h24) || 0) - ((a.volume && a.volume.h24) || 0));
-        const p = pairs[0];
-        const sym = (p.baseToken && p.baseToken.symbol) || '?';
-        const name = (p.baseToken && p.baseToken.name) || '';
-        const vol = (p.volume && p.volume.h24) || 0;
-        const ch = (p.priceChange && p.priceChange.h24);
-        const liq = (p.liquidity && p.liquidity.usd) || 0;
+        const p = pairs[0]; const sym = (p.baseToken && p.baseToken.symbol) || '?'; const name = (p.baseToken && p.baseToken.name) || '';
+        const vol = (p.volume && p.volume.h24) || 0; const ch = (p.priceChange && p.priceChange.h24); const liq = (p.liquidity && p.liquidity.usd) || 0;
         const chCls = ch == null ? 'text-[var(--muted)]' : (ch >= 0 ? 'text-emerald-400' : 'text-red-400');
-        preview.innerHTML = '<div class="flex flex-wrap items-center justify-between gap-2"><div><span class="font-semibold">' + sym + '</span> <span class="text-[var(--muted)]">/ SOL</span><div class="text-[10px] text-[var(--muted)] mono">' + name + '</div></div><div class="text-right mono text-[11px]"><div>Vol ' + fmtVol(vol) + '</div><div class="' + chCls + '">' + fmtCh(ch) + ' · Liq ' + fmtVol(liq) + '</div></div></div>';
-        preview.dataset.symbol = sym;
-        preview.dataset.name = name;
-      } catch (e) { preview.innerHTML = '<span class="text-red-400 text-[11px]">Lookup failed.</span>'; }
+        preview.innerHTML = '<div class="flex justify-between gap-2 flex-wrap"><div><span class="font-semibold">' + sym + '</span> <span class="text-[var(--muted)]">/ SOL</span><div class="text-[10px] text-[var(--muted)] mono">' + name + '</div></div><div class="mono text-[11px] text-right">Vol ' + fmtVol(vol) + '<div class="' + chCls + '">' + fmtCh(ch) + ' · Liq ' + fmtVol(liq) + '</div></div></div>';
+        preview.dataset.symbol = sym; preview.dataset.name = name;
+      } catch { preview.innerHTML = '<span class="text-red-400 text-[11px]">Lookup failed.</span>'; }
     }
     document.getElementById('lookup-mint').addEventListener('click', lookupMint);
-    let lookupTimer;
-    document.getElementById('token').addEventListener('input', () => { clearTimeout(lookupTimer); lookupTimer = setTimeout(lookupMint, 600); });
+    let t; document.getElementById('token').addEventListener('input', () => { clearTimeout(t); t = setTimeout(lookupMint, 500); });
     document.getElementById('submit-campaign').addEventListener('click', () => {
-      const token = document.getElementById('token').value.trim();
-      const pkg = document.getElementById('pkg').value;
-      const contact = document.getElementById('contact').value.trim();
-      const notes = document.getElementById('notes').value.trim();
+      const token = document.getElementById('token').value.trim(); const pkg = document.getElementById('pkg').value;
+      const contact = document.getElementById('contact').value.trim(); const notes = document.getElementById('notes').value.trim();
       const preview = document.getElementById('mint-preview');
-      if (!token) { alert('Enter token mint.'); return; }
-      if (!contact) { alert('Enter Telegram contact.'); return; }
+      if (!token) { alert('Enter mint.'); return; } if (!contact) { alert('Enter contact.'); return; }
       const c = { id: uid(), mint: token, symbol: preview.dataset.symbol || token.slice(0, 6), name: preview.dataset.name || '', pkg, channels: PKG_CH[pkg] || 0, contact, notes, placementNotes: '', status: 'pending', createdAt: new Date().toISOString() };
       const list = loadCampaigns(); list.unshift(c); saveCampaigns(list);
-      const msg = encodeURIComponent('DexRanker Campaign\n\nID: ' + c.id + '\nMint: ' + token + '\nPackage: ' + pkg + '\nContact: ' + contact + '\nNotes: ' + (notes || '—'));
-      window.open('https://t.me/share/url?url=&text=' + msg, '_blank');
-      alert('Campaign saved to Board (' + c.id + ').');
-      showView('board');
+      const share = reportShareUrl(c);
+      window.open('https://t.me/share/url?url=&text=' + encodeURIComponent('DexRanker Campaign\nID: ' + c.id + '\nMint: ' + token + '\nPkg: ' + pkg + '\nContact: ' + contact + '\nReport: ' + share), '_blank');
+      alert('Saved. Share link ready on Report tab.'); showView('board');
     });
     function renderBoard() {
-      const list = loadCampaigns();
-      const empty = document.getElementById('board-empty');
-      const wrap = document.getElementById('board-list');
-      if (!list.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); wrap.innerHTML = ''; return; }
+      const list = loadCampaigns(); const empty = document.getElementById('board-empty'); const wrap = document.getElementById('board-list');
+      if (!list.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); return; }
       empty.classList.add('hidden'); wrap.classList.remove('hidden');
       wrap.innerHTML = list.map(c => {
-        const st = c.status || 'pending';
-        const stCls = st === 'live' ? 'status-live' : st === 'done' ? 'status-done' : 'status-pending';
-        const created = c.createdAt ? new Date(c.createdAt).toLocaleString() : '—';
-        return '<div class="panel rounded p-3 flex flex-col sm:flex-row sm:items-center gap-3"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="font-semibold text-[13px]">' + (c.symbol || '?') + '</span><span class="pill bg-white/5 border border-[var(--border)] text-[var(--muted)]">' + (c.pkg || '').toUpperCase() + '</span><span class="mono text-[10px] ' + stCls + '">' + st.toUpperCase() + '</span></div><div class="mono text-[10px] text-[var(--muted)] truncate mt-0.5">' + c.mint + '</div><div class="text-[10px] text-[var(--muted)] mt-0.5">' + created + ' · ' + (c.contact || '') + ' · ' + (c.channels || '?') + 'ch</div></div><div class="flex flex-wrap gap-1.5"><button type="button" data-id="' + c.id + '" data-status="pending" class="board-status btn-ghost text-[10px] mono px-2 py-1 rounded">PENDING</button><button type="button" data-id="' + c.id + '" data-status="live" class="board-status btn-ghost text-[10px] mono px-2 py-1 rounded">LIVE</button><button type="button" data-id="' + c.id + '" data-status="done" class="board-status btn-ghost text-[10px] mono px-2 py-1 rounded">DONE</button><button type="button" data-id="' + c.id + '" class="board-report btn-primary text-[10px] mono px-2 py-1 rounded">REPORT</button></div></div>';
+        const st = c.status || 'pending'; const stCls = st === 'live' ? 'status-live' : st === 'done' ? 'status-done' : 'status-pending';
+        return '<div class="panel rounded p-3 flex flex-col sm:flex-row sm:items-center gap-2"><div class="flex-1 min-w-0"><div class="flex flex-wrap gap-2 items-center"><span class="font-semibold text-[13px]">' + (c.symbol || '?') + '</span><span class="pill bg-white/5 border border-[var(--border)] text-[var(--muted)]">' + (c.pkg || '').toUpperCase() + '</span><span class="mono text-[10px] ' + stCls + '">' + st.toUpperCase() + '</span></div><div class="mono text-[10px] text-[var(--muted)] truncate">' + c.mint + '</div><div class="text-[10px] text-[var(--muted)]">' + (c.contact || '') + ' · ' + (c.channels || '?') + 'ch</div></div><div class="flex flex-wrap gap-1"><button type="button" data-id="' + c.id + '" data-status="pending" class="board-status btn-ghost text-[10px] mono px-2 py-1 rounded">PEND</button><button type="button" data-id="' + c.id + '" data-status="live" class="board-status btn-ghost text-[10px] mono px-2 py-1 rounded">LIVE</button><button type="button" data-id="' + c.id + '" data-status="done" class="board-status btn-ghost text-[10px] mono px-2 py-1 rounded">DONE</button><button type="button" data-id="' + c.id + '" class="board-report btn-primary text-[10px] mono px-2 py-1 rounded">REPORT</button></div></div>';
       }).join('');
-      wrap.querySelectorAll('.board-status').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const status = btn.getAttribute('data-status');
-          const list = loadCampaigns();
-          const i = list.findIndex(x => x.id === id);
-          if (i >= 0) { list[i].status = status; saveCampaigns(list); renderBoard(); }
-        });
-      });
-      wrap.querySelectorAll('.board-report').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          showView('report');
-          const sel = document.getElementById('report-select');
-          if (sel) sel.value = id;
-          loadReport(id);
-        });
-      });
+      wrap.querySelectorAll('.board-status').forEach(btn => { btn.addEventListener('click', () => { const list = loadCampaigns(); const i = list.findIndex(x => x.id === btn.getAttribute('data-id')); if (i >= 0) { list[i].status = btn.getAttribute('data-status'); saveCampaigns(list); renderBoard(); } }); });
+      wrap.querySelectorAll('.board-report').forEach(btn => { btn.addEventListener('click', () => { const id = btn.getAttribute('data-id'); showView('report'); document.getElementById('report-select').value = id; const c = loadCampaigns().find(x => x.id === id); if (c) displayReport(c, false); }); });
     }
     document.getElementById('clear-done').addEventListener('click', () => { saveCampaigns(loadCampaigns().filter(c => c.status !== 'done')); renderBoard(); });
     function populateReportSelect() {
-      const sel = document.getElementById('report-select');
-      const list = loadCampaigns();
-      const cur = sel.value;
-      sel.innerHTML = '<option value="">Select campaign…</option>' + list.map(c => '<option value="' + c.id + '">' + (c.symbol || c.id) + ' · ' + (c.pkg || '') + ' · ' + (c.status || '') + '</option>').join('');
+      const sel = document.getElementById('report-select'); const list = loadCampaigns(); const cur = sel.value;
+      sel.innerHTML = '<option value="">From board…</option>' + list.map(c => '<option value="' + c.id + '">' + (c.symbol || c.id) + ' · ' + (c.status || '') + '</option>').join('');
       if (cur) sel.value = cur;
     }
-    function loadReport(id) {
-      const c = loadCampaigns().find(x => x.id === id);
-      const card = document.getElementById('report-card');
-      if (!c) { card.classList.add('hidden'); return; }
-      card.classList.remove('hidden');
+    function displayReport(c, fromUrl) {
+      const card = document.getElementById('report-card'); card.classList.remove('hidden');
       document.getElementById('rp-symbol').textContent = (c.symbol || '?') + (c.name ? ' — ' + c.name : '');
       document.getElementById('rp-mint').textContent = c.mint || '—';
       document.getElementById('rp-pkg').textContent = (c.pkg || '—').toUpperCase();
@@ -296,73 +246,63 @@
       document.getElementById('rp-contact').textContent = c.contact || '—';
       document.getElementById('rp-status').textContent = (c.status || 'pending').toUpperCase();
       document.getElementById('rp-notes').value = c.placementNotes || '';
-      const url = new URL(location.href);
-      url.searchParams.set('view', 'report');
-      url.searchParams.set('id', id);
-      history.replaceState(null, '', url.toString());
+      card.dataset.id = c.id || ''; card.dataset.fromUrl = fromUrl ? '1' : '0';
+      const url = new URL(location.href.split('?')[0]); url.searchParams.set('view', 'report'); url.searchParams.set('r', encodeReport(c)); history.replaceState(null, '', url.toString());
     }
-    document.getElementById('load-report').addEventListener('click', () => { const id = document.getElementById('report-select').value; if (id) loadReport(id); });
+    document.getElementById('load-report').addEventListener('click', () => { const id = document.getElementById('report-select').value; const c = loadCampaigns().find(x => x.id === id); if (c) displayReport(c, false); });
+    function currentReportFromUI() {
+      const card = document.getElementById('report-card'); if (card.classList.contains('hidden')) return null;
+      const id = card.dataset.id; let base = loadCampaigns().find(x => x.id === id) || {};
+      return { id: id || uid(), mint: document.getElementById('rp-mint').textContent, symbol: (document.getElementById('rp-symbol').textContent || '').split(' — ')[0], name: (document.getElementById('rp-symbol').textContent || '').includes(' — ') ? document.getElementById('rp-symbol').textContent.split(' — ').slice(1).join(' — ') : '', pkg: (document.getElementById('rp-pkg').textContent || '').toLowerCase(), channels: parseInt(document.getElementById('rp-ch').textContent, 10) || base.channels, contact: document.getElementById('rp-contact').textContent, status: (document.getElementById('rp-status').textContent || 'pending').toLowerCase(), createdAt: base.createdAt || new Date().toISOString(), placementNotes: document.getElementById('rp-notes').value };
+    }
     document.getElementById('save-rp-notes').addEventListener('click', () => {
-      const id = document.getElementById('report-select').value;
-      if (!id) return;
-      const list = loadCampaigns();
-      const i = list.findIndex(x => x.id === id);
-      if (i >= 0) { list[i].placementNotes = document.getElementById('rp-notes').value; saveCampaigns(list); alert('Notes saved.'); }
+      const card = document.getElementById('report-card'); const id = card.dataset.id; const list = loadCampaigns(); const i = list.findIndex(x => x.id === id);
+      if (i >= 0) { list[i].placementNotes = document.getElementById('rp-notes').value; saveCampaigns(list); displayReport(list[i], false); alert('Saved to board + link updated.'); }
+      else { alert('Share-link report — copy updated link to keep notes.'); const c = currentReportFromUI(); if (c) displayReport(c, true); }
     });
-    document.getElementById('copy-report-link').addEventListener('click', function () {
-      const id = document.getElementById('report-select').value;
-      if (!id) { alert('Select a campaign first.'); return; }
-      const url = new URL(location.href);
-      url.searchParams.set('view', 'report');
-      url.searchParams.set('id', id);
-      navigator.clipboard.writeText(url.toString());
-      this.textContent = 'Copied';
-      setTimeout(() => { this.textContent = 'Copy report link'; }, 1200);
-    });
-    async function loadScreener() {
-      const body = document.getElementById('pairs-body');
-      const status = document.getElementById('screener-status');
-      status.textContent = 'Loading…';
+    function copyShare() { const c = currentReportFromUI(); if (!c) { alert('Load a report first.'); return; } c.placementNotes = document.getElementById('rp-notes').value; const link = reportShareUrl(c); navigator.clipboard.writeText(link); history.replaceState(null, '', link); return link; }
+    document.getElementById('copy-report-link').addEventListener('click', function () { if (copyShare()) { this.textContent = 'Copied'; setTimeout(() => { this.textContent = 'Copy share link'; }, 1200); } });
+    document.getElementById('copy-report-link-2').addEventListener('click', function () { if (copyShare()) { this.textContent = 'Copied'; setTimeout(() => { this.textContent = 'Copy updated link'; }, 1200); } });
+    function toggleWatch(pair) { const list = loadWatch(); const i = list.findIndex(x => x.mint === pair.mint); if (i >= 0) list.splice(i, 1); else list.unshift({ mint: pair.mint, symbol: pair.symbol, name: pair.name || '', addedAt: new Date().toISOString() }); saveWatch(list); }
+    function isWatched(mint) { return loadWatch().some(x => x.mint === mint); }
+    async function renderWatch() {
+      const list = loadWatch(); const empty = document.getElementById('watch-empty'); const wrap = document.getElementById('watch-list');
+      if (!list.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); return; }
+      empty.classList.add('hidden'); wrap.classList.remove('hidden');
+      wrap.innerHTML = list.map(w => '<div class="panel rounded p-3 flex flex-wrap items-center gap-2" data-mint="' + w.mint + '"><div class="flex-1 min-w-0"><div class="font-semibold text-[13px]">' + (w.symbol || '?') + '</div><div class="mono text-[10px] text-[var(--muted)] truncate">' + w.mint + '</div><div class="watch-stats text-[11px] mono text-[var(--muted)]">…</div></div><button type="button" class="watch-campaign btn-primary text-[10px] mono px-2 py-1 rounded">CAMPAIGN</button><button type="button" class="watch-remove btn-ghost text-[10px] mono px-2 py-1 rounded">REMOVE</button></div>').join('');
+      wrap.querySelectorAll('.watch-remove').forEach(btn => { btn.addEventListener('click', () => { saveWatch(loadWatch().filter(x => x.mint !== btn.closest('[data-mint]').getAttribute('data-mint'))); renderWatch(); }); });
+      wrap.querySelectorAll('.watch-campaign').forEach(btn => { btn.addEventListener('click', () => { document.getElementById('token').value = btn.closest('[data-mint]').getAttribute('data-mint'); showView('order'); lookupMint(); }); });
       try {
-        const boostRes = await fetch('https://api.dexscreener.com/token-boosts/top/v1');
-        if (!boostRes.ok) throw new Error('boosts');
-        const boosts = await boostRes.json();
-        const sol = (boosts || []).filter(b => b.chainId === 'solana').slice(0, 12);
-        if (!sol.length) throw new Error('empty');
+        const res = await fetch('https://api.dexscreener.com/tokens/v1/solana/' + list.map(w => w.mint).slice(0, 20).join(','));
+        if (!res.ok) return; const data = await res.json(); const pairs = Array.isArray(data) ? data : (data.pairs || []); const by = {};
+        for (const p of pairs) { const a = p.baseToken && p.baseToken.address; if (!a) continue; const vol = (p.volume && p.volume.h24) || 0; if (!by[a] || vol > ((by[a].volume && by[a].volume.h24) || 0)) by[a] = p; }
+        wrap.querySelectorAll('[data-mint]').forEach(row => { const p = by[row.getAttribute('data-mint')]; const el = row.querySelector('.watch-stats'); if (!p || !el) return; const ch = p.priceChange && p.priceChange.h24; const chCls = ch == null ? '' : (ch >= 0 ? 'text-emerald-400' : 'text-red-400'); el.innerHTML = 'Vol ' + fmtVol(p.volume && p.volume.h24) + ' · <span class="' + chCls + '">' + fmtCh(ch) + '</span>'; });
+      } catch {}
+    }
+    document.getElementById('refresh-watch').addEventListener('click', renderWatch);
+    async function loadScreener() {
+      const body = document.getElementById('pairs-body'); const status = document.getElementById('screener-status'); status.textContent = '…';
+      try {
+        const boostRes = await fetch('https://api.dexscreener.com/token-boosts/top/v1'); if (!boostRes.ok) throw new Error('x');
+        const boosts = await boostRes.json(); const sol = (boosts || []).filter(b => b.chainId === 'solana').slice(0, 12);
         const tokRes = await fetch('https://api.dexscreener.com/tokens/v1/solana/' + sol.map(b => b.tokenAddress).join(','));
-        let pairs = [];
-        if (tokRes.ok) { const data = await tokRes.json(); pairs = Array.isArray(data) ? data : (data.pairs || []); }
-        const byToken = {};
-        for (const p of pairs) {
-          const addr = (p.baseToken && p.baseToken.address) || '';
-          if (!addr) continue;
-          const vol = (p.volume && p.volume.h24) || 0;
-          if (!byToken[addr] || vol > ((byToken[addr].volume && byToken[addr].volume.h24) || 0)) byToken[addr] = p;
-        }
-        const ordered = []; const seen = new Set();
-        for (const b of sol) { const p = byToken[b.tokenAddress]; if (p) { ordered.push(p); seen.add(b.tokenAddress); } }
-        for (const addr of Object.keys(byToken)) { if (!seen.has(addr)) ordered.push(byToken[addr]); }
-        if (!ordered.length) { body.innerHTML = '<div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">No pair stats — try Refresh.</div>'; status.textContent = 'Partial'; return; }
+        let pairs = []; if (tokRes.ok) { const data = await tokRes.json(); pairs = Array.isArray(data) ? data : (data.pairs || []); }
+        const byToken = {}; for (const p of pairs) { const addr = p.baseToken && p.baseToken.address; if (!addr) continue; const vol = (p.volume && p.volume.h24) || 0; if (!byToken[addr] || vol > ((byToken[addr].volume && byToken[addr].volume.h24) || 0)) byToken[addr] = p; }
+        const ordered = []; const seen = new Set(); for (const b of sol) { const p = byToken[b.tokenAddress]; if (p) { ordered.push(p); seen.add(b.tokenAddress); } } for (const a of Object.keys(byToken)) if (!seen.has(a)) ordered.push(byToken[a]);
+        if (!ordered.length) { body.innerHTML = '<div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">No data</div>'; status.textContent = 'Empty'; return; }
         body.innerHTML = ordered.slice(0, 10).map((p, i) => {
-          const sym = (p.baseToken && p.baseToken.symbol) || '?';
-          const name = (p.baseToken && p.baseToken.name) || '';
-          const vol = (p.volume && p.volume.h24) || 0;
-          const ch = (p.priceChange && p.priceChange.h24);
+          const sym = (p.baseToken && p.baseToken.symbol) || '?'; const name = (p.baseToken && p.baseToken.name) || ''; const mint = (p.baseToken && p.baseToken.address) || '';
+          const vol = (p.volume && p.volume.h24) || 0; const ch = p.priceChange && p.priceChange.h24;
           const chCls = ch == null ? 'text-[var(--muted)]' : (ch >= 0 ? 'text-emerald-400' : 'text-red-400');
-          const hot = ch != null && ch >= 50;
-          const statusPill = hot ? '<span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HOT</span>' : '<span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">LIVE</span>';
-          const url = p.url || ('https://dexscreener.com/solana/' + (p.pairAddress || ''));
-          return '<a href="' + url + '" target="_blank" rel="noopener" class="grid grid-cols-[28px_1fr_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px] text-inherit no-underline"><div class="mono text-[var(--muted)] text-[11px]">' + (i + 1) + '</div><div class="min-w-0"><div class="font-medium truncate">' + sym + ' <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">' + name + '</div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">' + fmtVol(vol) + '</div><div class="text-right mono text-[12px] ' + chCls + '">' + fmtCh(ch) + '</div><div class="text-right hidden sm:block">' + statusPill + '</div></a>';
+          const watched = isWatched(mint); const url = p.url || ('https://dexscreener.com/solana/' + (p.pairAddress || ''));
+          return '<div class="grid grid-cols-[28px_1fr_70px_56px] sm:grid-cols-[36px_1fr_90px_80px_70px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">' + (i + 1) + '</div><a class="min-w-0 text-inherit no-underline" href="' + url + '" target="_blank" rel="noopener"><div class="font-medium truncate">' + sym + ' <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">' + name + '</div></a><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">' + fmtVol(vol) + '</div><div class="text-right mono text-[12px] ' + chCls + '">' + fmtCh(ch) + '</div><div class="text-right"><button type="button" class="watch-btn text-[11px] mono ' + (watched ? 'text-sky-400' : 'text-[var(--muted)]') + '" data-mint="' + mint + '" data-symbol="' + sym.replace(/"/g, '') + '" data-name="' + name.replace(/"/g, '') + '">' + (watched ? '★' : '☆') + '</button></div></div>';
         }).join('');
-        status.textContent = 'Updated ' + new Date().toLocaleTimeString();
-      } catch (e) {
-        body.innerHTML = '<div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">Could not load live data.</div>';
-        status.textContent = 'Error';
-      }
+        body.querySelectorAll('.watch-btn').forEach(btn => { btn.addEventListener('click', () => { toggleWatch({ mint: btn.getAttribute('data-mint'), symbol: btn.getAttribute('data-symbol'), name: btn.getAttribute('data-name') }); loadScreener(); }); });
+        status.textContent = new Date().toLocaleTimeString();
+      } catch { body.innerHTML = '<div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">Load failed</div>'; status.textContent = 'Error'; }
     }
     document.getElementById('refresh-screener').addEventListener('click', loadScreener);
-    loadScreener();
-    setInterval(loadScreener, 60000);
+    loadScreener(); setInterval(loadScreener, 60000);
   </script>
 </body>
 </html>
