@@ -4,68 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DexRanker — Solana Visibility Terminal</title>
-  <meta name="description" content="Distribution terminal for Solana pairs. Push visibility across Dexscreener traffic channels." />
+  <meta name="description" content="Track Solana pairs. Run distribution. Measure what moved. Exposure tools only — no ranking guarantees." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #07080a;
-      --panel: #0c0e12;
-      --border: #1a1d24;
-      --border-hover: #2a2f3a;
-      --muted: #6b7280;
-      --text: #e5e7eb;
-      --green: #22c55e;
-      --red: #ef4444;
-      --blue: #38bdf8;
-      --amber: #f59e0b;
-    }
+    :root { --bg: #07080a; --panel: #0c0e12; --border: #1a1d24; --muted: #6b7280; --text: #e5e7eb; }
     * { box-sizing: border-box; }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; }
     .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-    }
-    .row-hover:hover { background: rgba(255,255,255,0.025); }
-    .pill {
-      font-size: 10px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-weight: 600;
-    }
-    input, select, textarea {
-      background: #0a0c10;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 13px;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #38bdf880;
-    }
-    .btn-primary {
-      background: #0ea5e9;
-      color: #000;
-      font-weight: 600;
-    }
+    .panel { background: var(--panel); border: 1px solid var(--border); }
+    .row-hover:hover { background: rgba(255,255,255,0.03); }
+    .pill { font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; font-weight: 600; }
+    input, select, textarea { background: #0a0c10; border: 1px solid var(--border); color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 13px; width: 100%; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #38bdf880; }
+    .btn-primary { background: #0ea5e9; color: #000; font-weight: 600; }
     .btn-primary:hover { background: #38bdf8; }
-    .btn-ghost {
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-    .btn-ghost:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.03); }
+    .btn-ghost { border: 1px solid var(--border); color: var(--text); }
+    .btn-ghost:hover { border-color: #2a2f3a; background: rgba(255,255,255,0.03); }
     details summary::-webkit-details-marker { display: none; }
+    .tab { color: var(--muted); border-bottom: 2px solid transparent; }
+    .tab.active { color: #fff; border-bottom-color: #38bdf8; }
+    .view { display: none; }
+    .view.active { display: block; }
   </style>
 </head>
 <body class="min-h-screen antialiased">
@@ -80,193 +42,322 @@
         </div>
         <span class="hidden sm:inline mono text-[10px] text-[var(--muted)] border border-[var(--border)] px-1.5 py-0.5 rounded">SOL</span>
       </div>
-      <nav class="hidden md:flex items-center gap-5 text-[12px] text-[var(--muted)]">
-        <a href="#terminal" class="hover:text-white transition">Terminal</a>
-        <a href="#packages" class="hover:text-white transition">Packages</a>
-        <a href="#pairs" class="hover:text-white transition">Trending</a>
-        <a href="#order" class="hover:text-white transition">New Campaign</a>
+      <nav class="flex items-center gap-1 sm:gap-4 text-[12px]">
+        <button type="button" data-view="screener" class="tab active px-2 py-3">Screener</button>
+        <button type="button" data-view="distribution" class="tab px-2 py-3">Distribution</button>
+        <button type="button" data-view="order" class="tab px-2 py-3">Campaign</button>
       </nav>
       <div class="flex items-center gap-2">
         <span class="hidden sm:flex items-center gap-1.5 mono text-[10px] text-emerald-400">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          LIVE
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> LIVE
         </span>
-        <a href="#order" class="btn-primary text-[12px] px-3 py-1.5 rounded">New Campaign</a>
+        <button type="button" data-view="order" class="btn-primary text-[12px] px-3 py-1.5 rounded nav-order">New Campaign</button>
       </div>
     </div>
   </header>
   <main class="max-w-[1200px] mx-auto px-3 sm:px-4 py-4 space-y-4">
     <div class="panel rounded flex flex-wrap items-center gap-x-6 gap-y-2 px-3 py-2 text-[11px] mono text-[var(--muted)]">
       <span>NETWORK <span class="text-white">Solana</span></span>
-      <span>CHANNELS <span class="text-white">80+</span></span>
-      <span>WINDOW <span class="text-white">24h</span></span>
-      <span>MODE <span class="text-sky-400">DISTRIBUTION</span></span>
+      <span>MODE <span class="text-sky-400">TERMINAL</span></span>
+      <span>PILLARS <span class="text-white">Screener · Distribution · Workspace</span></span>
       <span class="ml-auto text-[10px]">No volume · No wash · No ranking guarantees</span>
     </div>
-    <section id="terminal" class="grid lg:grid-cols-[1fr_320px] gap-4">
+
+    <section id="view-screener" class="view active space-y-4">
+      <div class="grid lg:grid-cols-[1fr_280px] gap-4">
+        <div class="panel rounded p-4 sm:p-5">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">SCREENER</span>
+            <span class="text-[11px] text-[var(--muted)] mono">free core</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-semibold tracking-tight mb-2">Solana pair visibility terminal</h1>
+          <p class="text-[13px] text-[var(--muted)] leading-relaxed max-w-xl">Track what’s moving. Run distribution when you’re ready. Measure placement — not promises. Rankings are decided by volume, makers, liquidity, and Dexscreener’s algorithm.</p>
+        </div>
+        <div class="panel rounded p-4 space-y-3">
+          <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider">Session</div>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">CHANNELS</div><div class="text-lg font-semibold mono">80+</div></div>
+            <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">WINDOW</div><div class="text-lg font-semibold mono">24h</div></div>
+            <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">START</div><div class="text-lg font-semibold mono text-sky-400">~2–4h</div></div>
+            <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">TYPE</div><div class="text-lg font-semibold mono">REAL</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-2 px-0.5">
+          <div class="flex items-center gap-2">
+            <span class="text-[12px] font-semibold">Trending / boosted pairs</span>
+            <span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">SOL</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="screener-status" class="text-[10px] mono text-[var(--muted)]">Loading…</span>
+            <button type="button" id="refresh-screener" class="btn-ghost text-[10px] mono px-2 py-1 rounded">REFRESH</button>
+          </div>
+        </div>
+        <div class="panel rounded overflow-hidden">
+          <div class="grid grid-cols-[28px_1fr_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2 border-b border-[var(--border)] text-[10px] mono text-[var(--muted)] uppercase tracking-wider">
+            <div>#</div><div>Pair</div><div class="text-right hidden sm:block">Volume 24h</div><div class="text-right">Change</div><div class="text-right hidden sm:block">Status</div>
+          </div>
+          <div id="pairs-body" class="divide-y divide-[var(--border)] min-h-[200px]">
+            <div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">Fetching Dexscreener…</div>
+          </div>
+          <div class="px-3 py-2 border-t border-[var(--border)] text-[10px] text-[var(--muted)] mono">Live data via Dexscreener public API · Not affiliated · Not financial advice</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-distribution" class="view space-y-4">
       <div class="panel rounded p-4 sm:p-5">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">TERMINAL</span>
-          <span class="text-[11px] text-[var(--muted)] mono">visibility · distribution</span>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="pill bg-sky-500/15 text-sky-400 border border-sky-500/20">DISTRIBUTION</span>
+          <span class="text-[11px] text-[var(--muted)] mono">paid module</span>
         </div>
-        <h1 class="text-xl sm:text-2xl font-semibold tracking-tight mb-2">Push Solana pairs into Dexscreener traffic</h1>
-        <p class="text-[13px] text-[var(--muted)] leading-relaxed max-w-xl mb-4">DexRanker is a distribution layer. We place your pair in front of active Solana channels that already watch Dexscreener. We do not create volume, control rankings, or promise top positions.</p>
-        <div class="flex flex-wrap gap-2">
-          <a href="#packages" class="btn-primary text-[12px] px-3.5 py-2 rounded">View packages</a>
-          <a href="#pairs" class="btn-ghost text-[12px] px-3.5 py-2 rounded">Trending pairs</a>
+        <h2 class="text-lg font-semibold mb-1">Push pairs into active Solana traffic</h2>
+        <p class="text-[13px] text-[var(--muted)] max-w-2xl">We place your pair in front of Telegram groups, X accounts, and signal feeds that already watch Dexscreener. You get exposure and a placement report. The market decides rank.</p>
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-2 px-0.5">
+          <span class="text-[12px] font-semibold">Packages</span>
+          <span class="text-[10px] mono text-[var(--muted)]">USD · SOL accepted</span>
         </div>
-      </div>
-      <div class="panel rounded p-4 space-y-3">
-        <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider">Session</div>
-        <div class="grid grid-cols-2 gap-2">
-          <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">CHANNELS</div><div class="text-lg font-semibold mono">80+</div></div>
-          <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">DURATION</div><div class="text-lg font-semibold mono">24h</div></div>
-          <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">START</div><div class="text-lg font-semibold mono text-sky-400">~2–4h</div></div>
-          <div class="bg-black/40 border border-[var(--border)] rounded p-2.5"><div class="text-[10px] text-[var(--muted)] mono">TYPE</div><div class="text-lg font-semibold mono">REAL</div></div>
-        </div>
-        <p class="text-[11px] text-[var(--muted)] leading-relaxed">Rankings are driven by volume, makers, liquidity, and the Dexscreener algorithm. We only handle exposure.</p>
-      </div>
-    </section>
-    <section id="packages">
-      <div class="flex items-center justify-between mb-2 px-0.5">
-        <div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Packages</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">3 tiers</span></div>
-        <span class="text-[10px] mono text-[var(--muted)]">USD · SOL accepted</span>
-      </div>
-      <div class="grid sm:grid-cols-3 gap-3">
-        <div class="panel rounded overflow-hidden">
-          <div class="px-3 py-2 border-b border-[var(--border)] flex items-center justify-between"><span class="text-[12px] font-medium">STARTER</span><span class="mono text-[11px] text-[var(--muted)]">15 CH</span></div>
-          <div class="p-3 space-y-3">
-            <div><div class="text-2xl font-semibold mono">$150</div><div class="text-[11px] text-[var(--muted)]">/ 24h campaign</div></div>
-            <ul class="space-y-1.5 text-[12px] text-[var(--muted)]">
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> 15 channels</li>
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> 24h window</li>
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> Basic report</li>
-            </ul>
-            <a href="#order" onclick="setPkg('starter')" class="block text-center btn-ghost text-[12px] py-2 rounded">Select</a>
+        <div class="grid sm:grid-cols-3 gap-3">
+          <div class="panel rounded overflow-hidden">
+            <div class="px-3 py-2 border-b border-[var(--border)] flex justify-between"><span class="text-[12px] font-medium">STARTER</span><span class="mono text-[11px] text-[var(--muted)]">15 CH</span></div>
+            <div class="p-3 space-y-3">
+              <div><div class="text-2xl font-semibold mono">$150</div><div class="text-[11px] text-[var(--muted)]">/ 24h</div></div>
+              <ul class="space-y-1.5 text-[12px] text-[var(--muted)]">
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> 15 channels</li>
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> 24h window</li>
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> Basic report</li>
+              </ul>
+              <button type="button" data-pkg="starter" data-view="order" class="pkg-select block w-full text-center btn-ghost text-[12px] py-2 rounded">Select</button>
+            </div>
           </div>
-        </div>
-        <div class="panel rounded overflow-hidden border-sky-500/40">
-          <div class="px-3 py-2 border-b border-sky-500/20 bg-sky-500/5 flex items-center justify-between"><span class="text-[12px] font-medium text-sky-300">GROWTH</span><span class="pill bg-sky-500/20 text-sky-300 border border-sky-500/30">MOST USED</span></div>
-          <div class="p-3 space-y-3">
-            <div><div class="text-2xl font-semibold mono">$400</div><div class="text-[11px] text-[var(--muted)]">/ 24h campaign</div></div>
-            <ul class="space-y-1.5 text-[12px] text-[var(--muted)]">
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> 40 channels</li>
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> Priority windows</li>
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> Campaign report</li>
-            </ul>
-            <a href="#order" onclick="setPkg('growth')" class="block text-center btn-primary text-[12px] py-2 rounded">Select</a>
+          <div class="panel rounded overflow-hidden border-sky-500/40">
+            <div class="px-3 py-2 border-b border-sky-500/20 bg-sky-500/5 flex justify-between"><span class="text-[12px] font-medium text-sky-300">GROWTH</span><span class="pill bg-sky-500/20 text-sky-300 border border-sky-500/30">MOST USED</span></div>
+            <div class="p-3 space-y-3">
+              <div><div class="text-2xl font-semibold mono">$400</div><div class="text-[11px] text-[var(--muted)]">/ 24h</div></div>
+              <ul class="space-y-1.5 text-[12px] text-[var(--muted)]">
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> 40 channels</li>
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> Priority windows</li>
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> Campaign report</li>
+              </ul>
+              <button type="button" data-pkg="growth" data-view="order" class="pkg-select block w-full text-center btn-primary text-[12px] py-2 rounded">Select</button>
+            </div>
           </div>
-        </div>
-        <div class="panel rounded overflow-hidden">
-          <div class="px-3 py-2 border-b border-[var(--border)] flex items-center justify-between"><span class="text-[12px] font-medium">SCALE</span><span class="mono text-[11px] text-[var(--muted)]">80 CH</span></div>
-          <div class="p-3 space-y-3">
-            <div><div class="text-2xl font-semibold mono">$900</div><div class="text-[11px] text-[var(--muted)]">/ 24h campaign</div></div>
-            <ul class="space-y-1.5 text-[12px] text-[var(--muted)]">
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> 80 channels</li>
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> Extended reach</li>
-              <li class="flex gap-2"><span class="text-sky-400">▸</span> Full report</li>
-            </ul>
-            <a href="#order" onclick="setPkg('scale')" class="block text-center btn-ghost text-[12px] py-2 rounded">Select</a>
+          <div class="panel rounded overflow-hidden">
+            <div class="px-3 py-2 border-b border-[var(--border)] flex justify-between"><span class="text-[12px] font-medium">SCALE</span><span class="mono text-[11px] text-[var(--muted)]">80 CH</span></div>
+            <div class="p-3 space-y-3">
+              <div><div class="text-2xl font-semibold mono">$900</div><div class="text-[11px] text-[var(--muted)]">/ 24h</div></div>
+              <ul class="space-y-1.5 text-[12px] text-[var(--muted)]">
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> 80 channels</li>
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> Extended reach</li>
+                <li class="flex gap-2"><span class="text-sky-400">▸</span> Full report</li>
+              </ul>
+              <button type="button" data-pkg="scale" data-view="order" class="pkg-select block w-full text-center btn-ghost text-[12px] py-2 rounded">Select</button>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
-    <section class="panel rounded p-4">
-      <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-3">Distribution rails</div>
-      <div class="grid sm:grid-cols-3 gap-3 text-[12px]">
-        <div class="border border-[var(--border)] rounded p-3"><div class="font-medium mb-1">Telegram</div><div class="text-[var(--muted)] text-[11px] leading-relaxed">Trading groups, alpha chats, call channels with daily Solana flow.</div></div>
-        <div class="border border-[var(--border)] rounded p-3"><div class="font-medium mb-1">X / Twitter</div><div class="text-[var(--muted)] text-[11px] leading-relaxed">Accounts that post pairs and Dexscreener links to active followers.</div></div>
-        <div class="border border-[var(--border)] rounded p-3"><div class="font-medium mb-1">Signal feeds</div><div class="text-[var(--muted)] text-[11px] leading-relaxed">Boards and feeds where traders scan new volume and momentum.</div></div>
-      </div>
-      <div class="mt-3 text-[11px] text-[var(--muted)] border-t border-[var(--border)] pt-3"><span class="text-amber-400/90">NOTE</span> — Works best when the pair already has some organic activity. Visibility amplifies; it does not invent demand.</div>
-    </section>
-    <section id="pairs">
-      <div class="flex items-center justify-between mb-2 px-0.5">
-        <div class="flex items-center gap-2"><span class="text-[12px] font-semibold">Trending pairs</span><span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">SOL</span></div>
-        <span class="text-[10px] mono text-[var(--muted)]">Dexscreener snapshot · Oct 28 2026</span>
-      </div>
-      <div class="panel rounded overflow-hidden">
-        <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2 border-b border-[var(--border)] text-[10px] mono text-[var(--muted)] uppercase tracking-wider">
-          <div>#</div><div>Pair</div><div class="text-right hidden sm:block">Volume</div><div class="text-right">Change</div><div class="text-right">Status</div>
-        </div>
-        <div class="divide-y divide-[var(--border)]">
-          <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">1</div><div class="flex items-center gap-2 min-w-0"><span class="text-base">🐸</span><div class="min-w-0"><div class="font-medium truncate">FRONGUS <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">Frongus Maximus</div></div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">$2.2M</div><div class="text-right mono text-[12px] text-emerald-400">+295%</div><div class="text-right"><span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HOT</span></div></div>
-          <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">2</div><div class="flex items-center gap-2 min-w-0"><span class="text-base">🐱</span><div class="min-w-0"><div class="font-medium truncate">GATO <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">GTA6CAT</div></div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">$882K</div><div class="text-right mono text-[12px] text-emerald-400">+15.6%</div><div class="text-right"><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">LIVE</span></div></div>
-          <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">3</div><div class="flex items-center gap-2 min-w-0"><span class="text-base">🐸</span><div class="min-w-0"><div class="font-medium truncate">Frongus <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">$6.5M vol</div></div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">$6.5M</div><div class="text-right mono text-[12px] text-emerald-400">+411%</div><div class="text-right"><span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HOT</span></div></div>
-          <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">4</div><div class="flex items-center gap-2 min-w-0"><span class="text-base">🦎</span><div class="min-w-0"><div class="font-medium truncate">SI <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">Super Iguana</div></div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">$2.6M</div><div class="text-right mono text-[12px] text-emerald-400">+1,034%</div><div class="text-right"><span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HOT</span></div></div>
-          <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">5</div><div class="flex items-center gap-2 min-w-0"><span class="text-base">🔄</span><div class="min-w-0"><div class="font-medium truncate">INVERSE <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">Inverse</div></div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">$2.0M</div><div class="text-right mono text-[12px] text-emerald-400">+1,301%</div><div class="text-right"><span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HOT</span></div></div>
-          <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">6</div><div class="flex items-center gap-2 min-w-0"><span class="text-base">🐶</span><div class="min-w-0"><div class="font-medium truncate">CHICO <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">GTA6DOG</div></div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">$4.9M</div><div class="text-right mono text-[12px] text-emerald-400">+112%</div><div class="text-right"><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">LIVE</span></div></div>
-          <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">7</div><div class="flex items-center gap-2 min-w-0"><span class="text-base">📈</span><div class="min-w-0"><div class="font-medium truncate">STONK <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">STONK</div></div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">$3.8M</div><div class="text-right mono text-[12px] text-emerald-400">+15.8%</div><div class="text-right"><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">LIVE</span></div></div>
-          <div class="grid grid-cols-[28px_1fr_90px_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]"><div class="mono text-[var(--muted)] text-[11px]">8</div><div class="flex items-center gap-2 min-w-0"><span class="text-base">💼</span><div class="min-w-0"><div class="font-medium truncate">JOB <span class="text-[var(--muted)] font-normal">/ SOL</span></div><div class="text-[10px] text-[var(--muted)] mono truncate">DogWifJob</div></div></div><div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">$596K</div><div class="text-right mono text-[12px] text-emerald-400">+4,774%</div><div class="text-right"><span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HOT</span></div></div>
-        </div>
-        <div class="px-3 py-2 border-t border-[var(--border)] text-[10px] text-[var(--muted)] mono">Snapshot only · Not affiliated with Dexscreener · Not financial advice</div>
-      </div>
-    </section>
-    <section class="grid md:grid-cols-2 gap-4">
-      <div class="panel rounded p-4">
-        <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-3">Execution flow</div>
-        <div class="space-y-3 text-[12px]">
-          <div class="flex gap-3"><span class="mono text-sky-400 w-5 shrink-0">01</span><div><span class="font-medium">Select package</span><span class="text-[var(--muted)]"> — tier by channel count</span></div></div>
-          <div class="flex gap-3"><span class="mono text-sky-400 w-5 shrink-0">02</span><div><span class="font-medium">Submit + pay</span><span class="text-[var(--muted)]"> — token CA + contact</span></div></div>
-          <div class="flex gap-3"><span class="mono text-sky-400 w-5 shrink-0">03</span><div><span class="font-medium">Distribution</span><span class="text-[var(--muted)]"> — 24h across selected rails</span></div></div>
-          <div class="flex gap-3"><span class="mono text-sky-400 w-5 shrink-0">04</span><div><span class="font-medium">Market</span><span class="text-[var(--muted)]"> — ranking = volume + makers + algo</span></div></div>
         </div>
       </div>
       <div class="panel rounded p-4">
-        <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-3">After payment</div>
-        <div class="space-y-3 text-[12px]">
-          <div class="flex gap-3"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5 shrink-0"></span><div><span class="font-medium">Confirm</span> <span class="text-[var(--muted)]">— usually 2–4h</span></div></div>
-          <div class="flex gap-3"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5 shrink-0"></span><div><span class="font-medium">Run window</span> <span class="text-[var(--muted)]">— 24h distribution</span></div></div>
-          <div class="flex gap-3"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5 shrink-0"></span><div><span class="font-medium">Report</span> <span class="text-[var(--muted)]">— channels + summary</span></div></div>
+        <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-3">Rails</div>
+        <div class="grid sm:grid-cols-3 gap-3 text-[12px]">
+          <div class="border border-[var(--border)] rounded p-3"><div class="font-medium mb-1">Telegram</div><div class="text-[var(--muted)] text-[11px]">Trading groups, alpha chats, call channels.</div></div>
+          <div class="border border-[var(--border)] rounded p-3"><div class="font-medium mb-1">X / Twitter</div><div class="text-[var(--muted)] text-[11px]">Accounts that post pairs and Dexscreener links.</div></div>
+          <div class="border border-[var(--border)] rounded p-3"><div class="font-medium mb-1">Signal feeds</div><div class="text-[var(--muted)] text-[11px]">Boards where traders scan volume and momentum.</div></div>
+        </div>
+        <div class="mt-3 text-[11px] text-[var(--muted)] border-t border-[var(--border)] pt-3"><span class="text-amber-400/90">NOTE</span> — Best when the pair already has some organic activity. Visibility amplifies; it does not invent demand.</div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="panel rounded p-4">
+          <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-3">Execution</div>
+          <div class="space-y-2 text-[12px]">
+            <div class="flex gap-3"><span class="mono text-sky-400 w-5">01</span><div><span class="font-medium">Select package</span></div></div>
+            <div class="flex gap-3"><span class="mono text-sky-400 w-5">02</span><div><span class="font-medium">Submit + pay</span> <span class="text-[var(--muted)]">mint + contact</span></div></div>
+            <div class="flex gap-3"><span class="mono text-sky-400 w-5">03</span><div><span class="font-medium">Distribution</span> <span class="text-[var(--muted)]">24h</span></div></div>
+            <div class="flex gap-3"><span class="mono text-sky-400 w-5">04</span><div><span class="font-medium">Market</span> <span class="text-[var(--muted)]">rank = activity + algo</span></div></div>
+          </div>
+        </div>
+        <div class="panel rounded p-4">
+          <div class="text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-3">After payment</div>
+          <div class="space-y-2 text-[12px]">
+            <div class="flex gap-3"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5"></span><div><span class="font-medium">Confirm</span> <span class="text-[var(--muted)]">~2–4h</span></div></div>
+            <div class="flex gap-3"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5"></span><div><span class="font-medium">Run window</span> <span class="text-[var(--muted)]">24h</span></div></div>
+            <div class="flex gap-3"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5"></span><div><span class="font-medium">Report</span> <span class="text-[var(--muted)]">channels + summary</span></div></div>
+          </div>
         </div>
       </div>
     </section>
-    <section id="order">
-      <div class="flex items-center gap-2 mb-2 px-0.5"><span class="text-[12px] font-semibold">New campaign</span><span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">ORDER</span></div>
+
+    <section id="view-order" class="view space-y-4">
+      <div class="flex items-center gap-2 px-0.5">
+        <span class="text-[12px] font-semibold">New campaign</span>
+        <span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">ORDER</span>
+      </div>
       <div class="panel rounded p-4">
         <div class="grid md:grid-cols-2 gap-6">
           <div class="space-y-3">
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Token mint</label><input id="token" type="text" placeholder="Contract address" class="w-full rounded px-3 py-2.5" /></div>
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Package</label><select id="pkg" class="w-full rounded px-3 py-2.5"><option value="starter">STARTER — $150 · 15ch</option><option value="growth" selected>GROWTH — $400 · 40ch</option><option value="scale">SCALE — $900 · 80ch</option></select></div>
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Contact (Telegram)</label><input id="contact" type="text" placeholder="@handle" class="w-full rounded px-3 py-2.5" /></div>
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Notes</label><textarea id="notes" rows="2" placeholder="Optional" class="w-full rounded px-3 py-2.5 resize-none"></textarea></div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Token mint</label><input id="token" type="text" placeholder="Contract address" class="rounded px-3 py-2.5" /></div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Package</label>
+              <select id="pkg" class="rounded px-3 py-2.5">
+                <option value="starter">STARTER — $150 · 15ch</option>
+                <option value="growth" selected>GROWTH — $400 · 40ch</option>
+                <option value="scale">SCALE — $900 · 80ch</option>
+              </select>
+            </div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Contact (Telegram)</label><input id="contact" type="text" placeholder="@handle" class="rounded px-3 py-2.5" /></div>
+            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Notes</label><textarea id="notes" rows="2" placeholder="Optional" class="rounded px-3 py-2.5 resize-none"></textarea></div>
           </div>
           <div class="space-y-3">
-            <div><label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Treasury (SOL)</label><div class="mono text-[12px] break-all bg-black/50 border border-[var(--border)] rounded px-3 py-2.5 text-sky-300/90 leading-relaxed">9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW</div><button type="button" onclick="navigator.clipboard.writeText('9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW'); this.textContent='COPIED'; setTimeout(()=>this.textContent='COPY',1200)" class="mt-1.5 text-[10px] mono text-sky-400 hover:text-sky-300">COPY</button></div>
-            <div class="border border-[var(--border)] rounded p-3 text-[11px] text-[var(--muted)] leading-relaxed">1. Send SOL for selected package<br/>2. Submit form (or TG message with tx + mint)<br/>3. Wait for confirm · campaign starts</div>
-            <button type="button" onclick="submitCampaign()" class="w-full btn-primary text-[13px] py-2.5 rounded">Submit campaign</button>
-            <p class="text-[10px] text-[var(--muted)] mono text-center">Always verify treasury address · Payments final</p>
+            <div>
+              <label class="block text-[10px] mono text-[var(--muted)] uppercase tracking-wider mb-1.5">Treasury (SOL)</label>
+              <div class="mono text-[12px] break-all bg-black/50 border border-[var(--border)] rounded px-3 py-2.5 text-sky-300/90">9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW</div>
+              <button type="button" id="copy-treasury" class="mt-1.5 text-[10px] mono text-sky-400 hover:text-sky-300">COPY</button>
+            </div>
+            <div class="border border-[var(--border)] rounded p-3 text-[11px] text-[var(--muted)] leading-relaxed">1. Send SOL for selected package<br/>2. Submit (or TG with tx + mint)<br/>3. Confirm → campaign starts</div>
+            <button type="button" id="submit-campaign" class="w-full btn-primary text-[13px] py-2.5 rounded">Submit campaign</button>
+            <p class="text-[10px] text-[var(--muted)] mono text-center">Verify treasury · Payments final</p>
           </div>
         </div>
       </div>
-    </section>
-    <section class="panel rounded overflow-hidden">
-      <div class="px-3 py-2 border-b border-[var(--border)] text-[11px] font-semibold">FAQ</div>
-      <div class="divide-y divide-[var(--border)]">
-        <details class="group"><summary class="px-3 py-2.5 text-[12px] cursor-pointer flex justify-between items-center list-none hover:bg-white/[0.02]">Ranking guarantees?<span class="text-[var(--muted)] text-[10px] mono group-open:rotate-180 transition">▼</span></summary><div class="px-3 pb-3 text-[11px] text-[var(--muted)] leading-relaxed">No. Rankings come from real activity + Dexscreener scoring. We only distribute exposure.</div></details>
-        <details class="group"><summary class="px-3 py-2.5 text-[12px] cursor-pointer flex justify-between items-center list-none hover:bg-white/[0.02]">Volume / wash trading?<span class="text-[var(--muted)] text-[10px] mono group-open:rotate-180 transition">▼</span></summary><div class="px-3 pb-3 text-[11px] text-[var(--muted)] leading-relaxed">No. Distribution and visibility only. No artificial volume.</div></details>
-        <details class="group"><summary class="px-3 py-2.5 text-[12px] cursor-pointer flex justify-between items-center list-none hover:bg-white/[0.02]">Best time to run?<span class="text-[var(--muted)] text-[10px] mono group-open:rotate-180 transition">▼</span></summary><div class="px-3 pb-3 text-[11px] text-[var(--muted)] leading-relaxed">When the pair already has some organic volume and liquidity. Cold pairs rarely move from exposure alone.</div></details>
-        <details class="group"><summary class="px-3 py-2.5 text-[12px] cursor-pointer flex justify-between items-center list-none hover:bg-white/[0.02]">Start latency?<span class="text-[var(--muted)] text-[10px] mono group-open:rotate-180 transition">▼</span></summary><div class="px-3 pb-3 text-[11px] text-[var(--muted)] leading-relaxed">Usually within a few hours of confirmed payment + details.</div></details>
+      <div class="panel rounded overflow-hidden">
+        <div class="px-3 py-2 border-b border-[var(--border)] text-[11px] font-semibold">FAQ</div>
+        <div class="divide-y divide-[var(--border)]">
+          <details class="group"><summary class="px-3 py-2.5 text-[12px] cursor-pointer flex justify-between list-none hover:bg-white/[0.02]">Ranking guarantees?<span class="text-[var(--muted)] text-[10px] mono">▼</span></summary><div class="px-3 pb-3 text-[11px] text-[var(--muted)]">No. Rankings come from real activity + Dexscreener scoring. We only distribute exposure.</div></details>
+          <details class="group"><summary class="px-3 py-2.5 text-[12px] cursor-pointer flex justify-between list-none hover:bg-white/[0.02]">Volume / wash?<span class="text-[var(--muted)] text-[10px] mono">▼</span></summary><div class="px-3 pb-3 text-[11px] text-[var(--muted)]">No. Distribution and visibility only.</div></details>
+          <details class="group"><summary class="px-3 py-2.5 text-[12px] cursor-pointer flex justify-between list-none hover:bg-white/[0.02]">Best time to run?<span class="text-[var(--muted)] text-[10px] mono">▼</span></summary><div class="px-3 pb-3 text-[11px] text-[var(--muted)]">When the pair already has some organic volume and liquidity.</div></details>
+        </div>
       </div>
     </section>
+
     <footer class="border-t border-[var(--border)] pt-4 pb-8 flex flex-col sm:flex-row justify-between gap-2 text-[10px] mono text-[var(--muted)]">
-      <span>DEXRANKER · 2026</span>
-      <span>EXPOSURE ONLY · NO RANKING GUARANTEES · NOT AFFILIATED WITH DEXSCREENER</span>
+      <span>DEXRANKER · PHASE 0 · 2026</span>
+      <span>EXPOSURE + TOOLS · NO RANKING GUARANTEES · NOT AFFILIATED WITH DEXSCREENER</span>
     </footer>
   </main>
+
   <script>
-    function setPkg(v) { const el = document.getElementById('pkg'); if (el) el.value = v; }
-    function submitCampaign() {
+    const TREASURY = '9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW';
+    function showView(name) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      const el = document.getElementById('view-' + name);
+      if (el) el.classList.add('active');
+      document.querySelectorAll('[data-view="' + name + '"]').forEach(t => { if (t.classList.contains('tab')) t.classList.add('active'); });
+    }
+    document.querySelectorAll('[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.getAttribute('data-view');
+        if (btn.classList.contains('pkg-select')) {
+          const pkg = btn.getAttribute('data-pkg');
+          const sel = document.getElementById('pkg');
+          if (sel && pkg) sel.value = pkg;
+        }
+        showView(v);
+      });
+    });
+    document.getElementById('copy-treasury').addEventListener('click', function () {
+      navigator.clipboard.writeText(TREASURY);
+      this.textContent = 'COPIED';
+      setTimeout(() => { this.textContent = 'COPY'; }, 1200);
+    });
+    document.getElementById('submit-campaign').addEventListener('click', () => {
       const token = document.getElementById('token').value.trim();
       const pkg = document.getElementById('pkg').value;
       const contact = document.getElementById('contact').value.trim();
       const notes = document.getElementById('notes').value.trim();
       if (!token) { alert('Enter token mint.'); return; }
-      if (!contact) { alert('Enter contact (Telegram).'); return; }
+      if (!contact) { alert('Enter Telegram contact.'); return; }
       const msg = encodeURIComponent('DexRanker Campaign\n\nMint: ' + token + '\nPackage: ' + pkg + '\nContact: ' + contact + '\nNotes: ' + (notes || '—'));
       window.open('https://t.me/share/url?url=&text=' + msg, '_blank');
       alert('Details prepared. Send with your payment tx signature.');
+    });
+    function fmtVol(n) {
+      if (n == null || isNaN(n)) return '—';
+      if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+      if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K';
+      return '$' + n.toFixed(0);
     }
+    function fmtCh(n) {
+      if (n == null || isNaN(n)) return '—';
+      return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+    }
+    async function loadScreener() {
+      const body = document.getElementById('pairs-body');
+      const status = document.getElementById('screener-status');
+      status.textContent = 'Loading…';
+      try {
+        const boostRes = await fetch('https://api.dexscreener.com/token-boosts/top/v1');
+        if (!boostRes.ok) throw new Error('boosts ' + boostRes.status);
+        const boosts = await boostRes.json();
+        const sol = (boosts || []).filter(b => b.chainId === 'solana').slice(0, 12);
+        if (!sol.length) throw new Error('no sol boosts');
+        const addrs = sol.map(b => b.tokenAddress).join(',');
+        const tokRes = await fetch('https://api.dexscreener.com/tokens/v1/solana/' + addrs);
+        let pairs = [];
+        if (tokRes.ok) {
+          const data = await tokRes.json();
+          pairs = Array.isArray(data) ? data : (data.pairs || []);
+        }
+        const byToken = {};
+        for (const p of pairs) {
+          const addr = (p.baseToken && p.baseToken.address) || '';
+          if (!addr) continue;
+          const vol = (p.volume && p.volume.h24) || 0;
+          if (!byToken[addr] || vol > ((byToken[addr].volume && byToken[addr].volume.h24) || 0)) byToken[addr] = p;
+        }
+        const ordered = [];
+        const seen = new Set();
+        for (const b of sol) {
+          const p = byToken[b.tokenAddress];
+          if (p) { ordered.push({ pair: p, boost: b }); seen.add(b.tokenAddress); }
+        }
+        for (const addr of Object.keys(byToken)) {
+          if (!seen.has(addr)) ordered.push({ pair: byToken[addr], boost: null });
+        }
+        if (!ordered.length) {
+          body.innerHTML = sol.slice(0, 8).map((b, i) => {
+            const short = (b.tokenAddress || '').slice(0, 4) + '…' + (b.tokenAddress || '').slice(-4);
+            return '<div class="grid grid-cols-[28px_1fr_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px]">' +
+              '<div class="mono text-[var(--muted)] text-[11px]">' + (i + 1) + '</div>' +
+              '<div class="min-w-0"><div class="font-medium truncate mono text-[12px]">' + short + '</div><div class="text-[10px] text-[var(--muted)] truncate">boosted</div></div>' +
+              '<div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">—</div>' +
+              '<div class="text-right mono text-[12px] text-[var(--muted)]">—</div>' +
+              '<div class="text-right hidden sm:block"><span class="pill bg-amber-500/10 text-amber-400 border border-amber-500/20">BOOST</span></div></div>';
+          }).join('');
+          status.textContent = 'Boosts only · ' + new Date().toLocaleTimeString();
+          return;
+        }
+        body.innerHTML = ordered.slice(0, 10).map((row, i) => {
+          const p = row.pair;
+          const sym = (p.baseToken && p.baseToken.symbol) || '?';
+          const name = (p.baseToken && p.baseToken.name) || '';
+          const vol = (p.volume && p.volume.h24) || 0;
+          const ch = (p.priceChange && p.priceChange.h24);
+          const chCls = ch == null ? 'text-[var(--muted)]' : (ch >= 0 ? 'text-emerald-400' : 'text-red-400');
+          const hot = ch != null && ch >= 50;
+          const statusPill = hot
+            ? '<span class="pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HOT</span>'
+            : '<span class="pill bg-white/5 text-[var(--muted)] border border-[var(--border)]">LIVE</span>';
+          const url = p.url || ('https://dexscreener.com/solana/' + (p.pairAddress || ''));
+          return '<a href="' + url + '" target="_blank" rel="noopener" class="grid grid-cols-[28px_1fr_70px] sm:grid-cols-[36px_1fr_100px_90px_80px] gap-2 px-3 py-2.5 items-center row-hover text-[13px] text-inherit no-underline">' +
+            '<div class="mono text-[var(--muted)] text-[11px]">' + (i + 1) + '</div>' +
+            '<div class="min-w-0"><div class="font-medium truncate">' + sym + ' <span class="text-[var(--muted)] font-normal">/ SOL</span></div>' +
+            '<div class="text-[10px] text-[var(--muted)] mono truncate">' + name + '</div></div>' +
+            '<div class="text-right mono text-[12px] text-[var(--muted)] hidden sm:block">' + fmtVol(vol) + '</div>' +
+            '<div class="text-right mono text-[12px] ' + chCls + '">' + fmtCh(ch) + '</div>' +
+            '<div class="text-right hidden sm:block">' + statusPill + '</div></a>';
+        }).join('');
+        status.textContent = 'Updated ' + new Date().toLocaleTimeString();
+      } catch (e) {
+        console.error(e);
+        body.innerHTML = '<div class="px-3 py-8 text-center text-[12px] text-[var(--muted)] mono">Could not load live data. Check network / try Refresh.</div>';
+        status.textContent = 'Error';
+      }
+    }
+    document.getElementById('refresh-screener').addEventListener('click', loadScreener);
+    loadScreener();
+    setInterval(loadScreener, 60000);
   </script>
 </body>
 </html>
