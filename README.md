@@ -1,71 +1,46 @@
 # DexRanker
 
-**Solana token visibility through real distribution channels.**
+**Solana pair visibility terminal** — track pairs, run distribution, measure placement.
 
-DexRanker is a clean, professional landing page for a Solana token promotion / distribution service focused on Dexscreener traffic.
+> Exposure + tools only. No volume. No wash. No ranking guarantees.
 
-## Positioning
+## Product map (Phase 0)
 
-This is intentionally **not** a hype site.
-
-- No ranking guarantees
-- No volume / wash trading claims
-- Clear process and transparent pricing
-- Real Solana trending data (snapshot)
-
-The goal is credibility over maximal conversion copy.
-
-## Features
-
-- Clean dark UI with strong hierarchy
-- Transparent 3-tier pricing
-- Honest "what this actually is" section
-- Live-style Solana trending feed (real pairs from Dexscreener)
-- FAQ with straight answers
-- Payment section with copyable treasury address
-- Fully responsive
+| Pillar | Status | What |
+|--------|--------|------|
+| **Screener** | Live | Dexscreener boosts + pair stats (client-side API) |
+| **Distribution** | Live | Starter / Growth / Scale packages + rails |
+| **Campaign** | Live | Order ticket → TG handoff + treasury |
+| **Workspace** | Next | Saved pairs, campaign history, reports |
 
 ## Stack
 
-- Pure HTML + Tailwind CSS (CDN)
-- No build step required
-- Ready for Vercel, Netlify, or any static host
+- Single-page terminal UI (HTML + Tailwind CDN + IBM Plex Mono)
+- Live data: `api.dexscreener.com` (token-boosts + tokens/v1)
+- Deploy: Vercel from this repo
 
-## Deploy
+## Local
 
-### Vercel (recommended)
-
-1. Import the repo in [vercel.com](https://vercel.com)
-2. Deploy (zero config)
-
-Or with the CLI:
-
-```bash
-npx vercel
-```
-
-### Local preview
-
-Just open `index.html` in a browser, or:
+Open `index.html` or:
 
 ```bash
 npx serve .
 ```
 
-## Customization
+## Customize
 
-| Item | Location |
-|------|----------|
-| Treasury address | `#start` section in `index.html` |
-| Package prices | `#packages` section |
-| Trending tokens | `#trending` section |
-| Copy / positioning | Hero + "What this actually is" |
+| Item | Where |
+|------|--------|
+| Treasury | Campaign view / `TREASURY` in script |
+| Packages | Distribution view |
+| Copy / disclaimers | All views |
 
-## Notes
+## Roadmap
 
-- Trending data is a static snapshot for demonstration. Replace with a live Dexscreener API feed if you want real-time updates.
-- Always keep disclaimers clear. Overpromising rankings destroys trust fast in this space.
+- **Phase 1** — Campaign status + proof/report pages
+- **Phase 2** — Auth, watchlist, alerts, Pro sub
+- **Phase 3** — Marketplace / API
 
 ---
 
-Built for Solana teams that prefer clarity over noise.
+Not affiliated with Dexscreener.
