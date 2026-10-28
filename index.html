@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DexRanker — Solana Token Visibility</title>
+  <meta name="description" content="Strategic distribution for Solana tokens. Reach active Dexscreener audiences through verified traffic channels." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            surface: {
+              50: '#0a0a0b',
+              100: '#111113',
+              200: '#18181b',
+              300: '#27272a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .text-gradient {
+      background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 40%, #0ea5e9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .card:hover {
+      background: rgba(255,255,255,0.035);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .popular {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: linear-gradient(180deg, rgba(14,165,233,0.06) 0%, rgba(255,255,255,0.02) 100%);
+    }
+    .badge {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    }
+  </style>
+</head>
+<body class="bg-black text-white antialiased selection:bg-sky-500/30">
+
+  <!-- Nav -->
+  <header class="fixed top-0 inset-x-0 z-50 border-b border-white/[0.06] bg-black/70 backdrop-blur-xl">
+    <div class="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-7 h-7 rounded-md bg-sky-500 flex items-center justify-center">
+          <svg class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <span class="font-semibold tracking-tight">DexRanker</span>
+      </a>
+      <nav class="hidden sm:flex items-center gap-7 text-[13px] text-white/50">
+        <a href="#how" class="hover:text-white transition">How it works</a>
+        <a href="#packages" class="hover:text-white transition">Packages</a>
+        <a href="#trending" class="hover:text-white transition">Trending</a>
+        <a href="#faq" class="hover:text-white transition">FAQ</a>
+      </nav>
+      <a href="#start" class="text-[13px] font-medium px-3.5 py-1.5 rounded-lg bg-white text-black hover:bg-white/90 transition">
+        Get started
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative pt-28 pb-20 sm:pt-36 sm:pb-28">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(14,165,233,0.15),transparent)]"></div>
+    <div class="relative max-w-3xl mx-auto px-5 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-[12px] text-white/60 mb-7">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        Built for Solana teams
+      </div>
+      <h1 class="text-4xl sm:text-5xl md:text-[3.5rem] font-bold tracking-tight leading-[1.15] mb-5">
+        Get your token in front of<br class="hidden sm:block" />
+        <span class="text-gradient">Dexscreener traffic</span>
+      </h1>
+      <p class="text-[17px] text-white/50 max-w-xl mx-auto leading-relaxed mb-9">
+        We distribute your token across active Solana communities and traffic channels that already watch Dexscreener. Visibility, not guarantees.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#packages" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-black font-semibold text-[15px] transition">
+          View packages
+        </a>
+        <a href="#trending" class="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/10 hover:bg-white/[0.04] font-medium text-[15px] transition">
+          See current trending
+        </a>
+      </div>
+
+      <!-- Trust strip -->
+      <div class="mt-16 grid grid-cols-3 gap-3 max-w-md mx-auto">
+        <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] py-4 px-2">
+          <div class="text-xl font-bold text-white">80+</div>
+          <div class="text-[11px] text-white/40 mt-0.5">Active channels</div>
+        </div>
+        <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] py-4 px-2">
+          <div class="text-xl font-bold text-white">24h</div>
+          <div class="text-[11px] text-white/40 mt-0.5">Campaign window</div>
+        </div>
+        <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] py-4 px-2">
+          <div class="text-xl font-bold text-white">Real</div>
+          <div class="text-[11px] text-white/40 mt-0.5">Human distribution</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Positioning -->
+  <section class="py-16 border-t border-white/[0.06]">
+    <div class="max-w-3xl mx-auto px-5">
+      <div class="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 sm:p-8">
+        <h2 class="text-lg font-semibold mb-3">What this actually is</h2>
+        <p class="text-white/50 text-[15px] leading-relaxed mb-4">
+          DexRanker is a distribution service. We place your token in front of people who already browse Dexscreener and Solana trading communities. We do not create volume, we do not control the Dexscreener algorithm, and we do not promise rankings.
+        </p>
+        <p class="text-white/50 text-[15px] leading-relaxed">
+          Rankings move based on real trading activity, unique wallets, liquidity, and market conditions. Our job is to increase the chance that the right eyes see your token while those conditions are forming.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="py-20 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="text-center mb-12">
+        <p class="text-sky-400 text-xs font-semibold tracking-widest uppercase mb-2">Process</p>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">Simple process. Clear expectations.</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card rounded-xl p-5">
+          <div class="text-2xl font-bold text-white/15 mb-3">01</div>
+          <h3 class="font-semibold mb-1.5">Choose a package</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Pick a distribution tier based on how many channels and how aggressive you want the push.</p>
+        </div>
+        <div class="card rounded-xl p-5">
+          <div class="text-2xl font-bold text-white/15 mb-3">02</div>
+          <h3 class="font-semibold mb-1.5">Submit token details</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Send the contract address and any notes. We configure the campaign around your pair.</p>
+        </div>
+        <div class="card rounded-xl p-5">
+          <div class="text-2xl font-bold text-white/15 mb-3">03</div>
+          <h3 class="font-semibold mb-1.5">Distribution begins</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Your token is shared across the selected network of active Solana and Dexscreener traffic sources.</p>
+        </div>
+        <div class="card rounded-xl p-5">
+          <div class="text-2xl font-bold text-white/15 mb-3">04</div>
+          <h3 class="font-semibold mb-1.5">Market decides</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Visibility can support momentum. Actual ranking depends on volume, makers, and the algorithm.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Packages -->
+  <section id="packages" class="py-20 border-t border-white/[0.06]">
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="text-center mb-12">
+        <p class="text-sky-400 text-xs font-semibold tracking-widest uppercase mb-2">Packages</p>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3">Transparent pricing</h2>
+        <p class="text-white/45 text-[15px] max-w-lg mx-auto">Every package runs for 24 hours. Higher tiers reach more channels. No hidden fees.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Starter -->
+        <div class="card rounded-2xl p-6 flex flex-col">
+          <div class="text-xs font-medium text-white/40 uppercase tracking-wider mb-2">Starter</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-bold">$150</span>
+            <span class="text-white/30 text-sm">/ 24h</span>
+          </div>
+          <p class="text-sm text-white/40 mb-6">Solid entry point for new pairs</p>
+          <ul class="space-y-2.5 text-sm text-white/60 mb-8 flex-1">
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> 15 active channels</li>
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> 24-hour distribution</li>
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> Basic campaign report</li>
+          </ul>
+          <a href="#start" class="block text-center py-2.5 rounded-lg border border-white/10 text-sm font-medium hover:bg-white/[0.04] transition">Select</a>
+        </div>
+
+        <!-- Growth (Popular) -->
+        <div class="card popular rounded-2xl p-6 flex flex-col relative">
+          <div class="absolute -top-2.5 left-1/2 -translate-x-1/2">
+            <span class="badge text-[11px] font-semibold text-white px-2.5 py-0.5 rounded-full">Most used</span>
+          </div>
+          <div class="text-xs font-medium text-sky-400/80 uppercase tracking-wider mb-2">Growth</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-bold">$400</span>
+            <span class="text-white/30 text-sm">/ 24h</span>
+          </div>
+          <p class="text-sm text-white/40 mb-6">Best balance of reach and cost</p>
+          <ul class="space-y-2.5 text-sm text-white/60 mb-8 flex-1">
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> 40 active channels</li>
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> 24-hour distribution</li>
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> Priority placement windows</li>
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> Campaign report</li>
+          </ul>
+          <a href="#start" class="block text-center py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-black text-sm font-semibold transition">Select</a>
+        </div>
+
+        <!-- Scale -->
+        <div class="card rounded-2xl p-6 flex flex-col">
+          <div class="text-xs font-medium text-white/40 uppercase tracking-wider mb-2">Scale</div>
+          <div class="flex items-baseline gap-1 mb-1">
+            <span class="text-3xl font-bold">$900</span>
+            <span class="text-white/30 text-sm">/ 24h</span>
+          </div>
+          <p class="text-sm text-white/40 mb-6">Maximum channel coverage</p>
+          <ul class="space-y-2.5 text-sm text-white/60 mb-8 flex-1">
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> 80 active channels</li>
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> 24-hour distribution</li>
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> Priority + extended reach</li>
+            <li class="flex gap-2"><span class="text-sky-400 shrink-0">✓</span> Full campaign report</li>
+          </ul>
+          <a href="#start" class="block text-center py-2.5 rounded-lg border border-white/10 text-sm font-medium hover:bg-white/[0.04] transition">Select</a>
+        </div>
+      </div>
+
+      <p class="text-center text-xs text-white/30 mt-8 max-w-md mx-auto">
+        Prices in USD. SOL equivalent accepted at the time of payment. We do not guarantee ranking outcomes.
+      </p>
+    </div>
+  </section>
+
+  <!-- Trending -->
+  <section id="trending" class="py-20 border-t border-white/[0.06]">
+    <div class="max-w-2xl mx-auto px-5">
+      <div class="flex items-end justify-between mb-8">
+        <div>
+          <p class="text-sky-400 text-xs font-semibold tracking-widest uppercase mb-1.5">Live</p>
+          <h2 class="text-2xl font-bold tracking-tight">Current Solana trending</h2>
+          <p class="text-sm text-white/40 mt-1">Snapshot from Dexscreener · Oct 28, 2026</p>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+          <span class="w-6 text-center text-sm text-white/30 font-medium">1</span>
+          <div class="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center text-base">🐸</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-medium text-[15px]">FRONGUS <span class="text-white/35 font-normal">/ SOL</span></div>
+            <div class="text-xs text-white/35">$2.2M vol · Frongus Maximus</div>
+          </div>
+          <div class="text-right">
+            <div class="text-emerald-400 text-sm font-medium">+295%</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+          <span class="w-6 text-center text-sm text-white/30 font-medium">2</span>
+          <div class="w-9 h-9 rounded-full bg-orange-500/20 flex items-center justify-center text-base">🐱</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-medium text-[15px]">GATO <span class="text-white/35 font-normal">/ SOL</span></div>
+            <div class="text-xs text-white/35">$882K vol · GTA6CAT</div>
+          </div>
+          <div class="text-right">
+            <div class="text-emerald-400 text-sm font-medium">+15.6%</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+          <span class="w-6 text-center text-sm text-white/30 font-medium">3</span>
+          <div class="w-9 h-9 rounded-full bg-lime-500/20 flex items-center justify-center text-base">🐸</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-medium text-[15px]">Frongus <span class="text-white/35 font-normal">/ SOL</span></div>
+            <div class="text-xs text-white/35">$6.5M vol</div>
+          </div>
+          <div class="text-right">
+            <div class="text-emerald-400 text-sm font-medium">+411%</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+          <span class="w-6 text-center text-sm text-white/30 font-medium">4</span>
+          <div class="w-9 h-9 rounded-full bg-cyan-500/20 flex items-center justify-center text-base">🦎</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-medium text-[15px]">SI <span class="text-white/35 font-normal">/ SOL</span></div>
+            <div class="text-xs text-white/35">$2.6M vol · Super Iguana</div>
+          </div>
+          <div class="text-right">
+            <div class="text-emerald-400 text-sm font-medium">+1,034%</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+          <span class="w-6 text-center text-sm text-white/30 font-medium">5</span>
+          <div class="w-9 h-9 rounded-full bg-rose-500/20 flex items-center justify-center text-base">🔄</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-medium text-[15px]">INVERSE <span class="text-white/35 font-normal">/ SOL</span></div>
+            <div class="text-xs text-white/35">$2.0M vol</div>
+          </div>
+          <div class="text-right">
+            <div class="text-emerald-400 text-sm font-medium">+1,301%</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+          <span class="w-6 text-center text-sm text-white/30 font-medium">6</span>
+          <div class="w-9 h-9 rounded-full bg-amber-500/20 flex items-center justify-center text-base">🐶</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-medium text-[15px]">CHICO <span class="text-white/35 font-normal">/ SOL</span></div>
+            <div class="text-xs text-white/35">$4.9M vol · GTA6DOG</div>
+          </div>
+          <div class="text-right">
+            <div class="text-emerald-400 text-sm font-medium">+112%</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+          <span class="w-6 text-center text-sm text-white/30 font-medium">7</span>
+          <div class="w-9 h-9 rounded-full bg-yellow-500/20 flex items-center justify-center text-base">📈</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-medium text-[15px]">STONK <span class="text-white/35 font-normal">/ SOL</span></div>
+            <div class="text-xs text-white/35">$3.8M vol</div>
+          </div>
+          <div class="text-right">
+            <div class="text-emerald-400 text-sm font-medium">+15.8%</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+          <span class="w-6 text-center text-sm text-white/30 font-medium">8</span>
+          <div class="w-9 h-9 rounded-full bg-blue-500/20 flex items-center justify-center text-base">💼</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-medium text-[15px]">JOB <span class="text-white/35 font-normal">/ SOL</span></div>
+            <div class="text-xs text-white/35">$596K vol · DogWifJob</div>
+          </div>
+          <div class="text-right">
+            <div class="text-emerald-400 text-sm font-medium">+4,774%</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center text-[11px] text-white/25 mt-6">
+        Data from Dexscreener public trending feed. Not affiliated with Dexscreener. For illustration only.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-20 border-t border-white/[0.06]">
+    <div class="max-w-2xl mx-auto px-5">
+      <div class="text-center mb-10">
+        <p class="text-sky-400 text-xs font-semibold tracking-widest uppercase mb-2">FAQ</p>
+        <h2 class="text-2xl font-bold tracking-tight">Straight answers</h2>
+      </div>
+
+      <div class="space-y-3">
+        <details class="group card rounded-xl">
+          <summary class="flex items-center justify-between cursor-pointer p-5 text-[15px] font-medium list-none">
+            Do you guarantee a ranking?
+            <svg class="w-4 h-4 text-white/30 group-open:rotate-180 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="px-5 pb-5 text-sm text-white/45 leading-relaxed -mt-1">
+            No. Dexscreener rankings are driven by real trading activity, unique wallets, liquidity, and their internal scoring. We increase exposure. The market and the algorithm determine rank.
+          </div>
+        </details>
+
+        <details class="group card rounded-xl">
+          <summary class="flex items-center justify-between cursor-pointer p-5 text-[15px] font-medium list-none">
+            Is this volume or wash trading?
+            <svg class="w-4 h-4 text-white/30 group-open:rotate-180 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="px-5 pb-5 text-sm text-white/45 leading-relaxed -mt-1">
+            No. We do not create artificial volume or engage in wash trading. This is a distribution and visibility service only.
+          </div>
+        </details>
+
+        <details class="group card rounded-xl">
+          <summary class="flex items-center justify-between cursor-pointer p-5 text-[15px] font-medium list-none">
+            How fast does a campaign start?
+            <svg class="w-4 h-4 text-white/30 group-open:rotate-180 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="px-5 pb-5 text-sm text-white/45 leading-relaxed -mt-1">
+            Most campaigns begin within a few hours of confirmed payment and token details. Timing can vary slightly based on channel availability.
+          </div>
+        </details>
+
+        <details class="group card rounded-xl">
+          <summary class="flex items-center justify-between cursor-pointer p-5 text-[15px] font-medium list-none">
+            What do I need to provide?
+            <svg class="w-4 h-4 text-white/30 group-open:rotate-180 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="px-5 pb-5 text-sm text-white/45 leading-relaxed -mt-1">
+            Token contract address, preferred package, and optionally any notes about timing or messaging. That’s it.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Start -->
+  <section id="start" class="py-20 border-t border-white/[0.06]">
+    <div class="max-w-xl mx-auto px-5 text-center">
+      <h2 class="text-2xl font-bold tracking-tight mb-3">Ready to run a campaign?</h2>
+      <p class="text-white/45 text-[15px] mb-8">Choose a package above, then send payment and your token details.</p>
+
+      <div class="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 text-left">
+        <div class="text-xs font-medium text-white/40 uppercase tracking-wider mb-3">Payment address (SOL)</div>
+        <div class="font-mono text-sm break-all bg-black/40 border border-white/[0.06] rounded-xl px-4 py-3.5 text-sky-300/90 leading-relaxed">
+          9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW
+        </div>
+        <button onclick="navigator.clipboard.writeText('9AzUN4VSmgFbG7dFJ1wDzFb12CUABgZnyAcQ6MeS11LW'); this.textContent='Copied'; setTimeout(()=>this.textContent='Copy address',1500)" class="mt-3 text-xs text-sky-400 hover:text-sky-300 font-medium">
+          Copy address
+        </button>
+        <p class="mt-4 text-xs text-white/30 leading-relaxed">
+          Always double-check the address. After payment, send the transaction signature and your token contract to start the campaign.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/[0.06] py-10">
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="flex flex-col sm:flex-row justify-between gap-6 mb-8">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-6 h-6 rounded bg-sky-500 flex items-center justify-center">
+              <svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <span class="font-semibold text-sm">DexRanker</span>
+          </div>
+          <p class="text-xs text-white/35 max-w-xs">Solana token visibility through real distribution channels.</p>
+        </div>
+        <div class="flex gap-10 text-sm">
+          <div>
+            <div class="text-white/50 font-medium mb-2 text-xs uppercase tracking-wider">Product</div>
+            <ul class="space-y-1.5 text-white/35 text-[13px]">
+              <li><a href="#packages" class="hover:text-white transition">Packages</a></li>
+              <li><a href="#trending" class="hover:text-white transition">Trending</a></li>
+              <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-white/50 font-medium mb-2 text-xs uppercase tracking-wider">Legal</div>
+            <ul class="space-y-1.5 text-white/35 text-[13px]">
+              <li><a href="#" class="hover:text-white transition">Terms</a></li>
+              <li><a href="#" class="hover:text-white transition">Disclaimer</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/[0.06] pt-6 text-[11px] text-white/25 flex flex-col sm:flex-row justify-between gap-2">
+        <span>© 2026 DexRanker</span>
+        <span>Exposure service only. No ranking guarantees. Not affiliated with Dexscreener.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
